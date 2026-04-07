@@ -1,0 +1,1408 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nguyễn Dũng – HUSC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet" />
+  <script src="data.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --ink: #1a1714;
+      --ink-2: #3d3730;
+      --ink-3: #7a6e64;
+      --paper: #faf8f4;
+      --paper-2: #f2ede6;
+      --accent: #8b3a24;
+      --accent-2: #c06030;
+      --rule: #d8cfc4;
+      --mono: 'JetBrains Mono', monospace;
+      --serif: 'Source Serif 4', Georgia, serif;
+      --display: 'Playfair Display', Georgia, serif;
+      --max: 900px;
+      --side: clamp(1.5rem, 5vw, 4rem);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--serif);
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.75;
+      font-size: 1.05rem;
+      font-weight: 300;
+    }
+
+    body.splash-loading {
+      overflow: hidden;
+    }
+
+    .splash-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 22% 18%, rgba(192, 96, 48, 0.15), transparent 45%),
+        radial-gradient(circle at 80% 80%, rgba(139, 58, 36, 0.12), transparent 50%),
+        var(--paper);
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.45s ease, visibility 0.45s ease;
+    }
+
+    .splash-screen.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .splash-content {
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .splash-avatar-wrap {
+      width: clamp(120px, 24vw, 180px);
+      aspect-ratio: 1;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      padding: 6px;
+      position: relative;
+      isolation: isolate;
+      box-shadow: 0 14px 38px rgba(26, 23, 20, 0.16);
+    }
+
+    .splash-avatar-wrap::before,
+    .splash-avatar-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .splash-avatar-wrap::before {
+      background: conic-gradient(from 0deg, #df7448, #f4ba66, #7ac3ff, #c76dff, #df7448);
+      animation: splashRingSpin 3s linear infinite;
+    }
+
+    .splash-avatar-wrap::after {
+      inset: -12px;
+      background: conic-gradient(from 180deg, rgba(223, 116, 72, 0.35), rgba(122, 195, 255, 0.35), rgba(199, 109, 255, 0.35), rgba(223, 116, 72, 0.35));
+      opacity: 0.65;
+      animation: splashRingSpinReverse 4.2s linear infinite;
+    }
+
+    .splash-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      border: 3px solid var(--paper);
+      position: relative;
+      z-index: 1;
+      filter: contrast(1.04) saturate(1.04);
+    }
+
+    .splash-name {
+      font-family: var(--display);
+      font-size: clamp(2rem, 7vw, 3.8rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      animation: splashRise 0.6s ease both;
+    }
+
+    .splash-sub {
+      margin-top: 0.75rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      animation: splashRise 0.6s 0.12s ease both;
+    }
+
+    .splash-bar {
+      width: min(290px, 62vw);
+      height: 6px;
+      background: rgba(26, 23, 20, 0.12);
+      margin: 1.2rem auto 0;
+      overflow: hidden;
+      border-radius: 999px;
+      animation: splashRise 0.6s 0.2s ease both;
+    }
+
+    .splash-bar::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), #de8a55);
+      transform-origin: left center;
+      animation: splashProgress 5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    .splash-dots {
+      margin-top: 0.65rem;
+      display: inline-flex;
+      gap: 0.35rem;
+      align-items: center;
+    }
+
+    .splash-dots span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.28;
+      animation: splashPulse 1s ease-in-out infinite;
+    }
+
+    .splash-dots span:nth-child(2) {
+      animation-delay: 0.16s;
+    }
+
+    .splash-dots span:nth-child(3) {
+      animation-delay: 0.32s;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--paper-2);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--rule);
+    }
+
+    .container {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--side);
+    }
+
+    /* ── HEADER ── */
+    header {
+      border-bottom: 2px solid var(--ink);
+      padding: 3rem 0 0;
+    }
+
+    .header-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--side);
+    }
+
+    .header-label {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.6s 0.1s forwards;
+    }
+
+    .header-name {
+      font-family: var(--display);
+      font-size: clamp(2.6rem, 7vw, 4.8rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.2s forwards;
+    }
+
+    .header-name em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .header-meta {
+      margin-top: 1.4rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 2rem;
+      font-size: 0.88rem;
+      color: var(--ink-2);
+      opacity: 0;
+      animation: fadeUp 0.7s 0.35s forwards;
+    }
+
+    .header-meta span {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .header-meta span::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    nav {
+      margin-top: 2.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--rule);
+      opacity: 0;
+      animation: fadeUp 0.7s 0.45s forwards;
+    }
+
+    nav a {
+      font-family: var(--mono);
+      font-size: 0.76rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      text-decoration: none;
+      padding: 0.7rem 1.2rem 0.7rem 0;
+      margin-right: 0.5rem;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    nav a:hover,
+    nav a.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── SECTIONS ── */
+    main {
+      padding: 4rem 0 6rem;
+    }
+
+    section {
+      padding: 3.5rem 0;
+      border-bottom: 1px solid var(--rule);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.6s forwards;
+    }
+
+    section:nth-child(1) {
+      animation-delay: 0.55s;
+    }
+
+    section:nth-child(2) {
+      animation-delay: 0.65s;
+    }
+
+    section:nth-child(3) {
+      animation-delay: 0.70s;
+    }
+
+    section:nth-child(4) {
+      animation-delay: 0.75s;
+    }
+
+    section:nth-child(5) {
+      animation-delay: 0.80s;
+    }
+
+    section:last-child {
+      border-bottom: none;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    /* Bio */
+    .bio-text {
+      font-size: 1.1rem;
+      max-width: 680px;
+      color: var(--ink-2);
+      line-height: 1.85;
+    }
+
+    .bio-text p+p {
+      margin-top: 1rem;
+    }
+
+    /* Tags */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      background: var(--paper-2);
+      border: 1px solid var(--rule);
+      color: var(--ink-2);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      padding: 0.3rem 0.85rem;
+      border-radius: 2px;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+      cursor: default;
+    }
+
+    .tag:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    /* ── TEACHING ── */
+    .teaching-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .teaching-card {
+      border: 1px solid var(--rule);
+      border-radius: 4px;
+      padding: 1.3rem 1.5rem;
+      background: var(--paper-2);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .teaching-card:hover {
+      border-color: var(--accent-2);
+      box-shadow: 0 2px 12px rgba(139, 58, 36, 0.08);
+    }
+
+    .teaching-card-name {
+      font-family: var(--display);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.35;
+      margin-bottom: 0.5rem;
+    }
+
+    .teaching-card-name a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .teaching-card-name a:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .teaching-card-desc {
+      font-size: 0.85rem;
+      color: var(--ink-3);
+      line-height: 1.55;
+    }
+
+    .teaching-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-top: 0.7rem;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      opacity: 0.85;
+      transition: opacity 0.2s;
+    }
+
+    .teaching-card-link::before {
+      content: '→';
+    }
+
+    .teaching-card-link:hover {
+      opacity: 1;
+    }
+
+    /* ── PUBLICATIONS ── */
+    .pub-toolbar {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 1.6rem;
+    }
+
+    .pub-stat {
+      font-family: var(--mono);
+      font-size: 0.73rem;
+      color: var(--ink-3);
+      margin-right: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .filter-btn {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      background: none;
+      border: 1px solid var(--rule);
+      color: var(--ink-3);
+      padding: 0.28rem 0.75rem;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--accent-2);
+      color: var(--ink);
+    }
+
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .scholar-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #4285f4;
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 2px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .scholar-badge:hover {
+      opacity: 0.85;
+    }
+
+    .researchgate-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #00a0b0;
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 2px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .researchgate-badge:hover {
+      opacity: 0.85;
+    }
+
+    .orcid-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #a6ce39;
+      color: #fff;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      padding: 0.28rem 0.7rem;
+      border-radius: 2px;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s;
+    }
+
+    .orcid-badge:hover {
+      opacity: 0.85;
+    }
+
+    /* Year group headers */
+    .pub-year-group {
+      margin-top: 2rem;
+    }
+
+    .pub-year-group:first-child {
+      margin-top: 0;
+    }
+
+    .pub-year-heading {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      color: var(--ink-3);
+      text-transform: uppercase;
+      padding-bottom: 0.6rem;
+      margin-bottom: 0;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .pub-year-heading strong {
+      color: var(--accent);
+      font-size: 0.88rem;
+      letter-spacing: 0;
+    }
+
+    .pub-count-badge {
+      background: var(--paper-2);
+      border: 1px solid var(--rule);
+      font-size: 0.65rem;
+      padding: 0.1rem 0.45rem;
+      border-radius: 10px;
+      color: var(--ink-3);
+    }
+
+    .pub-list {
+      list-style: none;
+    }
+
+    .pub-item {
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      gap: 0 1rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px dashed var(--rule);
+      transition: background 0.15s;
+    }
+
+    .pub-item:last-child {
+      border-bottom: none;
+    }
+
+    .pub-index {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--rule);
+      padding-top: 0.2rem;
+      text-align: right;
+    }
+
+    .pub-title {
+      font-family: var(--display);
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.4;
+      margin-bottom: 0.3rem;
+    }
+
+    .pub-title a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .pub-title a:hover {
+      border-bottom-color: var(--accent-2);
+    }
+
+    .pub-meta {
+      font-size: 0.82rem;
+      color: var(--ink-3);
+      line-height: 1.55;
+    }
+
+    .pub-meta em {
+      color: var(--ink-2);
+      font-style: italic;
+    }
+
+    .pub-type-badge {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.1rem 0.4rem;
+      border-radius: 2px;
+      margin-right: 0.4rem;
+      vertical-align: middle;
+    }
+
+    .pub-type-journal {
+      background: #e8f0fe;
+      color: #1a5bb5;
+    }
+
+    .pub-type-conference {
+      background: #fce8e6;
+      color: #a33;
+    }
+
+    .pub-type-book {
+      background: #e6f4ea;
+      color: #1a7a3a;
+    }
+
+    .pub-doi {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      text-decoration: none;
+      opacity: 0.8;
+      transition: opacity 0.2s;
+    }
+
+    .pub-doi:hover {
+      opacity: 1;
+    }
+
+    .pub-url {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--ink-3);
+      text-decoration: none;
+      opacity: 0.75;
+      transition: opacity 0.2s;
+    }
+
+    .pub-url:hover {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    .pub-empty {
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      color: var(--ink-3);
+      padding: 2rem;
+      border: 1px dashed var(--rule);
+      text-align: center;
+      border-radius: 4px;
+    }
+
+    /* ── CONTACT ── */
+    .contact-grid {
+      display: block;
+    }
+
+    .contact-panel {
+      background: var(--paper-2);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 1rem;
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 1.1rem;
+      align-items: start;
+    }
+
+    .contact-photo-img {
+      width: 100%;
+      max-width: none;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      margin: 0;
+      border-radius: 10px;
+      border: 1px solid var(--rule);
+    }
+
+    .contact-main {
+      min-width: 0;
+    }
+
+    .contact-name {
+      font-family: var(--display);
+      font-size: 1.2rem;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 0.25rem;
+    }
+
+    .contact-title {
+      font-size: 0.85rem;
+      color: var(--ink-2);
+      line-height: 1.6;
+      margin-bottom: 0.65rem;
+    }
+
+    .contact-lines {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .contact-lines li {
+      font-size: 0.9rem;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .contact-lines strong {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-right: 0.45rem;
+    }
+
+    .contact-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: 0.4rem;
+    }
+
+    .contact-value {
+      font-size: 0.9rem;
+      color: var(--ink);
+      word-break: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-value a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .contact-value a:hover {
+      opacity: 0.7;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 2px solid var(--ink);
+      padding: 1.8rem var(--side);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      max-width: calc(var(--max) + var(--side) * 2);
+      margin: 0 auto;
+    }
+
+    .footer-left {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--ink-3);
+      letter-spacing: 0.06em;
+    }
+
+    .footer-right {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--ink-3);
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-right a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes splashRise {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes splashProgress {
+      from {
+        transform: scaleX(0);
+      }
+
+      to {
+        transform: scaleX(1);
+      }
+    }
+
+    @keyframes splashPulse {
+      0%, 100% {
+        opacity: 0.28;
+        transform: translateY(0);
+      }
+
+      50% {
+        opacity: 1;
+        transform: translateY(-2px);
+      }
+    }
+
+    @keyframes splashRingSpin {
+      from {
+        transform: rotate(0);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes splashRingSpinReverse {
+      from {
+        transform: rotate(360deg);
+      }
+
+      to {
+        transform: rotate(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .pub-item {
+        grid-template-columns: 1fr;
+      }
+
+      .pub-index {
+        display: none;
+      }
+
+      .contact-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-photo-img {
+        max-width: 190px;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+
+<body class="splash-loading">
+  <div class="splash-screen" id="splash-screen" aria-live="polite">
+    <div class="splash-content">
+      <div class="splash-avatar-wrap">
+        <img class="splash-avatar" src="assets/images/dung.png" alt="Ảnh Nguyễn Dũng" />
+      </div>
+      <div class="splash-name">Nguyễn Dũng</div>
+      <div class="splash-sub">Academic Profile</div>
+      <div class="splash-bar"></div>
+      <div class="splash-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+    </div>
+  </div>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-label">Trang cá nhân · Học thuật</div>
+      <h1 class="header-name">Nguyễn <em>Dũng</em></h1>
+      <div class="header-meta">
+        <span id="h-title"></span>
+        <span id="h-dept"></span>
+      </div>
+      <nav>
+        <a href="#about">Giới thiệu</a>
+        <a href="#research">Nghiên cứu</a>
+        <a href="#teaching">Giảng dạy</a>
+        <a href="#publications">Công trình</a>
+        <a href="#contact">Liên hệ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <section id="about">
+        <div class="section-label">Giới thiệu</div>
+        <div class="bio-text" id="bio-text"></div>
+      </section>
+
+      <section id="research">
+        <div class="section-label">Hướng nghiên cứu</div>
+        <div class="tags" id="research-tags"></div>
+      </section>
+
+      <section id="teaching">
+        <div class="section-label">Giảng dạy</div>
+        <div class="teaching-grid" id="teaching-grid"></div>
+      </section>
+
+      <section id="publications">
+        <div class="section-label">Công trình nghiên cứu</div>
+        <div class="pub-toolbar">
+          <div class="pub-stat" id="pub-stat">…</div>
+          <button class="filter-btn active" data-filter="all">Tất cả</button>
+          <button class="filter-btn" data-filter="journal">Tạp chí</button>
+          <button class="filter-btn" data-filter="conference">Hội nghị</button>
+          <a id="scholar-link" class="scholar-badge" style="display:none" href="#" target="_blank" rel="noopener">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
+              <path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838.95V20h14.324V10.45L24 9.5 12 0z" />
+            </svg>
+            Google Scholar
+          </a>
+          <a class="orcid-badge" href="" id="orcid-link" target="_blank" rel="noopener">
+            <svg width="12" height="12" viewBox="0 0 256 256" fill="white">
+              <circle cx="128" cy="128" r="128" fill="#a6ce39" />
+              <path
+                d="M86.3 186.2H70.9V79.1h15.4v107.1zM108.9 79.1h41.6c39.6 0 57 28.3 57 53.6 0 27.5-21.5 53.6-56.8 53.6h-41.8V79.1zm15.4 93.3h24.5c34.9 0 42.9-26.5 42.9-39.7C191.7 111.2 178 93 154 93h-29.7v79.4zM88.7 56.8c0 5.5-4.5 10.1-10.1 10.1s-10.1-4.6-10.1-10.1c0-5.6 4.5-10.1 10.1-10.1s10.1 4.6 10.1 10.1z"
+                fill="white" />
+            </svg>
+            ORCID
+          </a>
+        </div>
+        <div id="pub-container"></div>
+      </section>
+
+      <section id="contact">
+        <div class="section-label">Liên hệ</div>
+        <div class="contact-grid" id="contact-grid"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-left" id="footer-left"></div>
+    <div class="footer-right" id="footer-right"></div>
+  </footer>
+
+  <script>
+    const splashStartedAt = performance.now();
+    function hideSplash() {
+      const splash = document.getElementById('splash-screen');
+      if (!splash || splash.classList.contains('is-hidden')) return;
+      splash.classList.add('is-hidden');
+      document.body.classList.remove('splash-loading');
+    }
+
+    function hideSplashWithMinDuration(minMs = 5000) {
+      const elapsed = performance.now() - splashStartedAt;
+      const delay = Math.max(0, minMs - elapsed);
+      window.setTimeout(hideSplash, delay);
+    }
+
+    const EXCEL_FILES = [
+      {
+        label: "Danh sách công trình",
+        type: "gsheet",
+        spreadsheetId: "1QH-UAOGskfazBcLWSgasXxsnTnvsqnOU",
+        apiKey: "AIzaSyBaqV9lDDlcqnfgvGyULmPitZpBN9EOxkI"
+      }
+    ];
+    // ── Render thông tin cơ bản ─────────────────────────────────────
+    document.title = `${profileData.name} – ${profileData.department}`;
+    document.getElementById('h-title').textContent = profileData.title;
+    document.getElementById('h-dept').textContent = profileData.department + ', ' + profileData.university;
+
+    // Bio
+    const bioEl = document.getElementById('bio-text');
+    profileData.bio.split('\n').forEach(p => {
+      if (p.trim()) { const el = document.createElement('p'); el.textContent = p.trim(); bioEl.appendChild(el); }
+    });
+
+    // Research interests
+    const tagsEl = document.getElementById('research-tags');
+    profileData.researchInterests.forEach(r => {
+      const s = document.createElement('span'); s.className = 'tag'; s.textContent = r; tagsEl.appendChild(s);
+    });
+
+    // ── Giảng dạy ──────────────────────────────────────────────────
+    const teachGrid = document.getElementById('teaching-grid');
+    (profileData.teaching || []).forEach(c => {
+      const card = document.createElement('div'); card.className = 'teaching-card';
+      const nameHtml = c.url ? `<a href="${c.url}" target="_blank" rel="noopener">${c.name}</a>` : c.name;
+      card.innerHTML = `
+    <div class="teaching-card-name">${nameHtml}</div>
+    <div class="teaching-card-desc">${c.description || ''}</div>
+    ${c.url ? `<a class="teaching-card-link" href="${c.url}" target="_blank" rel="noopener">${c.url.replace(/^https?:\/\//, '')}</a>` : ''}`;
+      teachGrid.appendChild(card);
+    });
+
+    // ── Publications ────────────────────────────────────────────────
+    let allPubs = [];
+    let activeFilter = 'all';
+
+    function typeLabel(type) {
+      if (type === 'journal') return '<span class="pub-type-badge pub-type-journal">Tạp chí</span>';
+      if (type === 'conference') return '<span class="pub-type-badge pub-type-conference">Hội nghị</span>';
+      if (type === 'book') return '<span class="pub-type-badge pub-type-book">Sách</span>';
+      return '';
+    }
+
+    function renderPubs(pubs) {
+      const container = document.getElementById('pub-container');
+      container.innerHTML = '';
+
+      const filtered = activeFilter === 'all' ? pubs : pubs.filter(p => p.type === activeFilter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="pub-empty">Không có công trình nào phù hợp.</div>`;
+        return;
+      }
+
+      // Nhóm theo năm
+      const byYear = {};
+      filtered.forEach(p => {
+        const y = p.year || 0;
+        if (!byYear[y]) byYear[y] = [];
+        byYear[y].push(p);
+      });
+      const years = Object.keys(byYear).sort((a, b) => b - a);
+
+      let globalIdx = filtered.length;
+      years.forEach(year => {
+        const group = document.createElement('div'); group.className = 'pub-year-group';
+        const heading = document.createElement('div'); heading.className = 'pub-year-heading';
+        heading.innerHTML = `<strong>${year}</strong> <span class="pub-count-badge">${byYear[year].length} công trình</span>`;
+        group.appendChild(heading);
+
+        const ul = document.createElement('ul'); ul.className = 'pub-list';
+        byYear[year].forEach(pub => {
+          const li = document.createElement('li'); li.className = 'pub-item';
+          const link = pub.doi
+            ? `<a href="https://doi.org/${pub.doi}" target="_blank" rel="noopener">${pub.title}</a>`
+            : pub.url
+              ? `<a href="${pub.url}" target="_blank" rel="noopener">${pub.title}</a>`
+              : pub.title;
+          const doiEl = pub.doi
+            ? `<br><a class="pub-doi" href="https://doi.org/${pub.doi}" target="_blank">doi:${pub.doi}</a>`
+            : pub.url && !pub.doi
+              ? `<br><a class="pub-url" href="${pub.url}" target="_blank">[Xem toàn văn]</a>`
+              : '';
+          li.innerHTML = `
+        <div class="pub-index">${globalIdx--}</div>
+        <div>
+          <div class="pub-title">${link}</div>
+          <div class="pub-meta">
+            ${typeLabel(pub.type)}
+            ${pub.authors ? pub.authors + '<br>' : ''}
+            ${pub.journal ? `<em>${pub.journal}</em>` : ''}
+            ${pub.volume ? `, ${pub.volume}` : ''}
+            ${pub.pages ? `, tr. ${pub.pages}` : ''}
+            ${doiEl}
+          </div>
+        </div>`;
+          ul.appendChild(li);
+        });
+        group.appendChild(ul);
+        container.appendChild(group);
+      });
+    }
+
+    function updateStat() {
+      const total = allPubs.length;
+      const journal = allPubs.filter(p => p.type === 'journal').length;
+      const conf = allPubs.filter(p => p.type === 'conference').length;
+      document.getElementById('pub-stat').textContent =
+        `${total} công trình · ${journal} tạp chí · ${conf} hội nghị`;
+    }
+
+    function normalizeHeader(text) {
+      return String(text || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, '_');
+    }
+
+    function normalizeType(type) {
+      const raw = String(type || '').toLowerCase();
+      const folded = raw
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '_');
+
+      if (folded.includes('journal') || folded.includes('tap_chi') || folded.includes('tapchi')) return 'journal';
+      if (folded.includes('conference') || folded.includes('hoi_nghi') || folded.includes('hoinghi')) return 'conference';
+      if (folded.includes('book') || folded.includes('sach')) return 'book';
+      return '';
+    }
+
+    function toPublicationRecord(item) {
+      const year = parseInt(item.year, 10);
+      const rec = {
+        year: Number.isNaN(year) ? 0 : year,
+        title: item.title || '',
+        authors: item.authors || '',
+        journal: item.journal || '',
+        volume: item.volume || '',
+        pages: item.pages || '',
+        doi: item.doi || '',
+        url: item.url || '',
+        type: normalizeType(item.type)
+      };
+
+      if (!rec.type) {
+        const source = `${rec.journal} ${rec.title}`.toLowerCase();
+        rec.type = /conference|proceeding|workshop|symposium|hoi nghi/.test(source) ? 'conference' : 'journal';
+      }
+
+      return rec;
+    }
+
+    function parseSheetRows(rows) {
+      if (!Array.isArray(rows) || rows.length === 0) return [];
+
+      const header = (rows[0] || []).map(normalizeHeader);
+      const aliases = {
+        year: ['year', 'nam', 'published_year', 'publication_year', 'nam_xuat_ban'],
+        title: ['title', 'tieu_de', 'ten_bai_bao', 'paper_title', 'article_title', 'ten_bai', 'bai_bao'],
+        authors: ['authors', 'tac_gia', 'author', 'dong_tac_gia'],
+        journal: ['journal', 'venue', 'tap_chi', 'conference_name', 'noi_dang', 'source', 'publication'],
+        volume: ['volume', 'tap', 'so', 'vol', 'issue'],
+        pages: ['pages', 'trang', 'page', 'pp'],
+        doi: ['doi', 'doi_link'],
+        url: ['url', 'link', 'pdf', 'fulltext', 'full_text'],
+        type: ['type', 'loai', 'category']
+      };
+
+      const indexByKey = {};
+      Object.keys(aliases).forEach(key => {
+        const exact = header.findIndex(h => aliases[key].includes(h));
+        if (exact >= 0) {
+          indexByKey[key] = exact;
+          return;
+        }
+        indexByKey[key] = header.findIndex(h => aliases[key].some(alias => h.includes(alias)));
+      });
+
+      const hasHeader = indexByKey.title >= 0;
+      const dataRows = hasHeader ? rows.slice(1) : rows;
+
+      // Fallback when sheet has no header row: use common column order.
+      if (!hasHeader) {
+        const order = ['year', 'title', 'authors', 'journal', 'volume', 'pages', 'doi', 'url', 'type'];
+        order.forEach((key, idx) => {
+          if (indexByKey[key] < 0) indexByKey[key] = idx;
+        });
+      }
+
+      return dataRows
+        .filter(r => (r || []).some(v => String(v || '').trim() !== ''))
+        .map(row => {
+          const obj = {};
+          Object.keys(indexByKey).forEach(key => {
+            const idx = indexByKey[key];
+            obj[key] = idx >= 0 ? String(row[idx] || '').trim() : '';
+          });
+          return toPublicationRecord(obj);
+        })
+        .filter(pub => pub.title);
+    }
+
+    function parseGvizRows(text) {
+      const prefix = 'google.visualization.Query.setResponse(';
+      const start = text.indexOf(prefix);
+      if (start < 0) throw new Error('Khong doc duoc du lieu gviz');
+      const jsonText = text.slice(start + prefix.length, text.lastIndexOf(');'));
+      const payload = JSON.parse(jsonText);
+      const table = payload?.table;
+      if (!table) return [];
+
+      const headers = (table.cols || []).map(c => (c?.label || c?.id || '').trim());
+      const rows = (table.rows || []).map(r => (r.c || []).map(cell => (cell?.v ?? '').toString()));
+      return parseSheetRows([headers, ...rows]);
+    }
+
+    async function fetchFirstSheetTitle(spreadsheetId, apiKey) {
+      const metaUrl = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}?fields=sheets(properties(title))&key=${encodeURIComponent(apiKey)}`;
+      const res = await fetch(metaUrl);
+      if (!res.ok) throw new Error(`Khong lay duoc metadata sheet (${res.status})`);
+      const data = await res.json();
+      const firstSheet = data?.sheets?.[0]?.properties?.title;
+      if (!firstSheet) throw new Error('Khong tim thay tab du lieu trong Google Sheet');
+      return firstSheet;
+    }
+
+    async function fetchPublicationsFromGSheet(config) {
+      const sheetTitle = await fetchFirstSheetTitle(config.spreadsheetId, config.apiKey);
+      const range = encodeURIComponent(`${sheetTitle}!A1:Z2000`);
+      const valuesUrl = `https://sheets.googleapis.com/v4/spreadsheets/${config.spreadsheetId}/values/${range}?key=${encodeURIComponent(config.apiKey)}`;
+      const res = await fetch(valuesUrl);
+      if (!res.ok) throw new Error(`Khong lay duoc du lieu cong trinh (${res.status})`);
+      const data = await res.json();
+      return parseSheetRows(data.values || []);
+    }
+
+    async function fetchPublicationsFromGviz(config) {
+      const gvizUrl = `https://docs.google.com/spreadsheets/d/${config.spreadsheetId}/gviz/tq?tqx=out:json`;
+      const res = await fetch(gvizUrl);
+      if (!res.ok) throw new Error(`Khong lay duoc du lieu gviz (${res.status})`);
+      const text = await res.text();
+      return parseGvizRows(text);
+    }
+
+    async function loadPublications() {
+      const pubStat = document.getElementById('pub-stat');
+      pubStat.textContent = 'Dang tai cong trinh tu Google Sheet...';
+      let loadError = false;
+
+      const source = EXCEL_FILES.find(f => f.type === 'gsheet' && f.spreadsheetId && f.apiKey);
+      if (!source) {
+        allPubs = profileData.publications || [];
+        updateStat();
+        renderPubs(allPubs);
+        return;
+      }
+
+      try {
+        let pubs = [];
+        try {
+          pubs = await fetchPublicationsFromGSheet(source);
+        } catch (apiErr) {
+          console.warn('Sheets API failed, try gviz fallback:', apiErr);
+          pubs = await fetchPublicationsFromGviz(source);
+        }
+        allPubs = pubs.length ? pubs : (profileData.publications || []);
+      } catch (err) {
+        console.error('Load publications failed:', err);
+        allPubs = profileData.publications || [];
+        loadError = true;
+      }
+
+      updateStat();
+      renderPubs(allPubs);
+      if (loadError) {
+        pubStat.textContent += ' (du lieu du phong)';
+      }
+      hideSplashWithMinDuration();
+    }
+
+    // Bộ lọc
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        renderPubs(allPubs);
+      });
+    });
+
+    // Khởi tạo: đọc công trình từ Google Sheet (fallback về data.js nếu lỗi)
+    loadPublications();
+    window.setTimeout(hideSplash, 5500);
+
+
+
+    // Scholar & ORCID links
+    const sl = document.getElementById('scholar-link');
+    if (profileData.links?.googleScholar) { sl.href = profileData.links.googleScholar; sl.style.display = 'inline-flex'; }
+    document.getElementById('orcid-link').href = profileData.orcidUrl;
+
+    // ── Contact ─────────────────────────────────────────────────────
+    const grid = document.getElementById('contact-grid');
+    const emailsHtml = (profileData.emails || [])
+      .map(email => `<a href="mailto:${email}">${email}</a>`)
+      .join('<br>');
+    const scholarHtml = profileData.links?.googleScholar
+      ? `<a class="scholar-badge" href="${profileData.links.googleScholar}" target="_blank" rel="noopener">Google Scholar</a>`
+      : '';
+    const rgHtml = profileData.links?.researchgate
+      ? `<a class="researchgate-badge" href="${profileData.links.researchgate}" target="_blank" rel="noopener">ResearchGate</a>`
+      : '';
+
+    grid.innerHTML = `
+      <div class="contact-panel">
+        <img class="contact-photo-img" src="assets/images/dung.png" alt="Ảnh Nguyễn Dũng">
+        <div class="contact-main">
+          <div class="contact-label">Hồ sơ liên hệ</div>
+          <div class="contact-name">${profileData.name}</div>
+          <div class="contact-title">${profileData.title} · ${profileData.department}</div>
+          <ul class="contact-lines">
+            <li><strong>Email</strong>${emailsHtml || 'Đang cập nhật'}</li>
+            <li><strong>Đơn vị</strong>${profileData.department}<br>${profileData.university}</li>
+            ${profileData.address ? `<li><strong>Địa chỉ</strong>${profileData.address}</li>` : ''}
+            <li><strong>ORCID</strong><a href="${profileData.orcidUrl}" target="_blank" rel="noopener">${profileData.orcid}</a></li>
+            ${scholarHtml ? `<li><strong>Scholar</strong>${scholarHtml}</li>` : ''}
+            ${rgHtml ? `<li><strong>ResearchGate</strong>${rgHtml}</li>` : ''}
+          </ul>
+        </div>
+      </div>
+    `;
+
+    // ── Footer ───────────────────────────────────────────────────────
+    document.getElementById('footer-left').textContent =
+      `${profileData.name} · ${profileData.department} · ${new Date().getFullYear()}`;
+    const fr = document.getElementById('footer-right');
+    fr.innerHTML = `<a href="${profileData.orcidUrl}" target="_blank">ORCID ${profileData.orcid}</a>`;
+    if (profileData.links?.googleScholar)
+      fr.innerHTML += `<a href="${profileData.links.googleScholar}" target="_blank">Google Scholar</a>`;
+    if (profileData.links?.researchgate)
+      fr.innerHTML += `<a href="${profileData.links.researchgate}" target="_blank">ResearchGate</a>`;
+
+    // ── Active nav ───────────────────────────────────────────────────
+    const secs = document.querySelectorAll('section[id]');
+    const navAs = document.querySelectorAll('nav a');
+    new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting)
+          navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+      });
+    }, { rootMargin: '-40% 0px -55% 0px' }).observe
+      ? (secs.forEach(s => new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting)
+            navAs.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' }).observe(s))) : null;
+  </script>
+
+</body>
+
+</html>
