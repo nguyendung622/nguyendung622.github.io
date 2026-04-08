@@ -26,9 +26,9 @@
       --paper: #faf8f4;
       --paper-2: #f2ede6;
       --paper-3: #e8e2d9;
-      --accent: #8b3a24;
-      --accent-2: #c06030;
-      --accent-3: #d48a6a;
+      --accent: #F56960;
+      --accent-2: #DAA588;
+      --accent-3: #F3C98B;
       --rule: #d8cfc4;
       --mono: 'JetBrains Mono', monospace;
       --serif: 'Source Serif 4', Georgia, serif;
@@ -39,7 +39,7 @@
       --shadow-lg: 0 8px 32px rgba(26, 23, 20, 0.12);
       --shadow-xl: 0 20px 60px rgba(26, 23, 20, 0.15);
       --gradient: linear-gradient(135deg, var(--paper) 0%, var(--paper-2) 100%);
-      --gradient-accent: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+      --gradient-accent: linear-gradient(135deg, #F56960 0%, #DAA588 50%, #F3C98B 100%);
     }
 
     html {
@@ -72,9 +72,9 @@
       display: grid;
       place-items: center;
       background:
-        radial-gradient(circle at 22% 18%, rgba(192, 96, 48, 0.08), transparent 45%),
-        radial-gradient(circle at 80% 80%, rgba(139, 58, 36, 0.06), transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(216, 207, 196, 0.05), transparent 70%),
+        radial-gradient(circle at 22% 18%, rgba(245, 105, 96, 0.06), transparent 45%),
+        radial-gradient(circle at 80% 80%, rgba(218, 165, 136, 0.04), transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(243, 201, 139, 0.03), transparent 70%),
         var(--gradient);
       opacity: 1;
       visibility: visible;
@@ -1172,7 +1172,7 @@
 
       50% {
         transform: scale(1.05);
-        box-shadow: var(--shadow-xl), 0 0 40px rgba(139, 58, 36, 0.3);
+        box-shadow: var(--shadow-xl), 0 0 40px rgba(245, 105, 96, 0.3);
       }
     }
 
