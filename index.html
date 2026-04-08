@@ -302,6 +302,10 @@
       animation-delay: 0.80s;
     }
 
+    section:nth-child(6) {
+      animation-delay: 0.85s;
+    }
+
     section:last-child {
       border-bottom: none;
     }
@@ -989,6 +993,11 @@
         <div id="pub-container"></div>
       </section>
 
+      <section id="books">
+        <div class="section-label">Sách / Giáo trình</div>
+        <div id="books-container"></div>
+      </section>
+
       <section id="contact">
         <div class="section-label">Liên hệ</div>
         <div class="contact-grid" id="contact-grid"></div>
@@ -1320,6 +1329,44 @@
     window.setTimeout(hideSplash, 5500);
 
 
+
+    // ── Books ────────────────────────────────────────────────────────
+    const books = [
+      {
+        isbn: 'XXXXX',
+        title: 'Giáo trình XML và ứng dụng',
+        type: 'Giáo trình',
+        field: 'Khoa học máy tính và khoa học thông tin khác',
+        publisher: 'NXB Đại học Huế',
+        year: '2019',
+        authors: 'Nguyễn Mậu Hân (Chủ biên), Nguyễn Dũng, Nguyễn Hoàng Hà',
+      },
+    ];
+
+    (function renderBooks() {
+      const bc = document.getElementById('books-container');
+      if (!bc) return;
+      const ul = document.createElement('ul');
+      ul.className = 'pub-list';
+      books.forEach((book, i) => {
+        const li = document.createElement('li');
+        li.className = 'pub-item';
+        li.innerHTML = `
+          <div class="pub-index">${books.length - i}</div>
+          <div>
+            <div class="pub-title">${book.title}</div>
+            <div class="pub-meta">
+              <span class="pub-type-badge pub-type-book">${book.type}</span>
+              ${book.authors}<br>
+              <em>${book.publisher}</em>, ${book.year}<br>
+              ${book.field}<br>
+              <span style="font-family:var(--mono);font-size:0.7rem;opacity:0.6">ISBN: ${book.isbn}</span>
+            </div>
+          </div>`;
+        ul.appendChild(li);
+      });
+      bc.appendChild(ul);
+    })();
 
     // Scholar & ORCID links
     const sl = document.getElementById('scholar-link');
