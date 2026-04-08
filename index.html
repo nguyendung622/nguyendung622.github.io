@@ -435,6 +435,94 @@
       opacity: 1;
     }
 
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .project-card {
+      background: var(--paper-2);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 4px 0 0 4px;
+    }
+
+    .project-title {
+      font-family: var(--display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.4;
+      margin-bottom: 1rem;
+    }
+
+    .project-meta {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      font-size: 0.9rem;
+      color: var(--ink-2);
+      margin-bottom: 0.75rem;
+    }
+
+    .project-period {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .project-sponsor {
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .project-role {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 3px;
+      background: var(--accent-2);
+      color: white;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+
+    .project-status {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .project-status.completed {
+      background: #e6f4ea;
+      color: #1a7a3a;
+    }
+
+    .project-status.ongoing {
+      background: #fef7e0;
+      color: #b45309;
+    }
+
     /* ── PUBLICATIONS ── */
     .pub-toolbar {
       display: flex;
@@ -967,6 +1055,11 @@
         <div class="teaching-grid" id="teaching-grid"></div>
       </section>
 
+      <section id="projects">
+        <div class="section-label">Đề tài / Dự án</div>
+        <div class="projects-grid" id="projects-grid"></div>
+      </section>
+
       <section id="publications">
         <div class="section-label">Công trình nghiên cứu</div>
         <div class="pub-toolbar">
@@ -1061,6 +1154,23 @@
     <div class="teaching-card-desc">${c.description || ''}</div>
     ${c.url ? `<a class="teaching-card-link" href="${c.url}" target="_blank" rel="noopener">${c.url.replace(/^https?:\/\//, '')}</a>` : ''}`;
       teachGrid.appendChild(card);
+    });
+
+    // ── Projects ────────────────────────────────────────────────────
+    const projectsGrid = document.getElementById('projects-grid');
+    (profileData.projects || []).forEach(p => {
+      const card = document.createElement('div'); card.className = 'project-card';
+      const statusClass = p.status === 'Đang thực hiện' ? 'ongoing' : 'completed';
+      card.innerHTML = `
+        <div class="project-title">${p.title}</div>
+        <div class="project-meta">
+          <div class="project-sponsor">${p.sponsor}</div>
+          <div class="project-period">${p.period}</div>
+        </div>
+        <div class="project-role">${p.role}</div>
+        <div class="project-status ${statusClass}">${p.status}</div>
+      `;
+      projectsGrid.appendChild(card);
     });
 
     // ── Publications ────────────────────────────────────────────────
