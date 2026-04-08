@@ -145,7 +145,8 @@
       border: 3px solid var(--paper);
       position: relative;
       z-index: 1;
-      filter: contrast(1.04) saturate(1.04);
+      filter: contrast(1.1) saturate(1.1) brightness(1.05);
+      transition: filter 0.3s ease;
     }
 
     .splash-name {
@@ -329,7 +330,7 @@
 
     /* ── SECTIONS ── */
     main {
-      padding: 4rem 0 6rem;
+      padding: 4rem 0 3rem;
     }
 
     section {
@@ -935,10 +936,13 @@
       max-width: none;
       aspect-ratio: 1 / 1;
       object-fit: cover;
+      object-position: top;
       display: block;
       margin: 0;
       border-radius: 10px;
       border: 1px solid var(--rule);
+      filter: contrast(1.1) saturate(1.1) brightness(1.05);
+      transition: filter 0.3s ease;
     }
 
     .contact-main {
@@ -1012,7 +1016,7 @@
     /* ── FOOTER ── */
     footer {
       border-top: 2px solid var(--ink);
-      padding: 2.5rem var(--side);
+      padding: 1.5rem var(--side);
       display: flex;
       justify-content: space-between;
       align-items: center;
