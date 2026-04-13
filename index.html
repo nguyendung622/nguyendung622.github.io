@@ -320,9 +320,10 @@
     section:hover {
       background: linear-gradient(135deg, rgba(250, 248, 244, 0.3) 0%, rgba(242, 237, 230, 0.3) 100%);
     }
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 0.6s forwards;
+
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s forwards;
     }
 
     section:nth-child(1) {
@@ -1151,7 +1152,9 @@
     }
 
     @keyframes splashAvatarPulse {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: scale(1);
         box-shadow: var(--shadow-xl);
       }
@@ -1163,7 +1166,9 @@
     }
 
     @keyframes splashRingPulse {
-      0%, 100% {
+
+      0%,
+      100% {
         opacity: 0.3;
         transform: scale(1);
       }
@@ -1427,7 +1432,8 @@
           <div class="pub-meta">
             ${typeLabel(pub.type)}
             ${pub.authors ? pub.authors + '<br>' : ''}
-            ${shouldShowPublisher(pub.journal, pub.publisher) ? `${pub.journal ? ' · ' : ''}${pub.publisher}` : ''}
+            
+            ${pub.publisher ? pub.publisher : ''}
             ${pub.volume ? `, ${pub.volume}` : ''}
             ${pub.pages ? `, tr. ${pub.pages}` : ''}
             ${doiEl}
@@ -1468,25 +1474,6 @@
       if (folded.includes('conference') || folded.includes('hoi_nghi') || folded.includes('hoinghi')) return 'conference';
       if (folded.includes('book') || folded.includes('sach')) return 'book';
       return '';
-    }
-
-    function normalizeTextForCompare(text) {
-      return String(text || '')
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase()
-        .replace(/\btap chi\b/g, '')
-        .replace(/\bjournal\b/g, '')
-        .replace(/[^a-z0-9]+/g, ' ')
-        .trim();
-    }
-
-    function shouldShowPublisher(journal, publisher) {
-      const j = normalizeTextForCompare(journal);
-      const p = normalizeTextForCompare(publisher);
-      if (!p) return false;
-      if (!j) return true;
-      return !(j.includes(p) || p.includes(j));
     }
 
     function toPublicationRecord(item) {
@@ -1780,14 +1767,14 @@
 
   </script>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-V607KRFT0V"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-V607KRFT0V"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-  gtag('config', 'G-V607KRFT0V');
-</script>
+    gtag('config', 'G-V607KRFT0V');
+  </script>
 </body>
 
 </html>
