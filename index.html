@@ -1427,7 +1427,7 @@
           <div class="pub-meta">
             ${typeLabel(pub.type)}
             ${pub.authors ? pub.authors + '<br>' : ''}
-            ${pub.journal ? `<em>${pub.journal}</em>` : ''}
+            ${shouldShowPublisher(pub.journal, pub.publisher) ? `${pub.journal ? ' · ' : ''}${pub.publisher}` : ''}
             ${pub.volume ? `, ${pub.volume}` : ''}
             ${pub.pages ? `, tr. ${pub.pages}` : ''}
             ${doiEl}
@@ -1470,6 +1470,25 @@
       return '';
     }
 
+    function normalizeTextForCompare(text) {
+      return String(text || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/\btap chi\b/g, '')
+        .replace(/\bjournal\b/g, '')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+    }
+
+    function shouldShowPublisher(journal, publisher) {
+      const j = normalizeTextForCompare(journal);
+      const p = normalizeTextForCompare(publisher);
+      if (!p) return false;
+      if (!j) return true;
+      return !(j.includes(p) || p.includes(j));
+    }
+
     function toPublicationRecord(item) {
       const year = parseInt(item.year, 10);
       const rec = {
@@ -1477,6 +1496,7 @@
         title: item.title || '',
         authors: item.authors || '',
         journal: item.journal || '',
+        publisher: item.publisher || '',
         volume: item.volume || '',
         pages: item.pages || '',
         doi: item.doi || '',
@@ -1501,6 +1521,7 @@
         title: ['title', 'tieu_de', 'ten_bai_bao', 'paper_title', 'article_title', 'ten_bai', 'bai_bao'],
         authors: ['authors', 'tac_gia', 'author', 'dong_tac_gia'],
         journal: ['journal', 'venue', 'tap_chi', 'conference_name', 'noi_dang', 'source', 'publication'],
+        publisher: ['publisher', 'nha_xuat_ban', 'nxb', 'published_by', 'publisher_name'],
         volume: ['volume', 'tap', 'so', 'vol', 'issue'],
         pages: ['pages', 'trang', 'page', 'pp'],
         doi: ['doi', 'doi_link'],
@@ -1523,7 +1544,10 @@
 
       // Fallback when sheet has no header row: use common column order.
       if (!hasHeader) {
-        const order = ['year', 'title', 'authors', 'journal', 'volume', 'pages', 'doi', 'url', 'type'];
+        const maxCols = Math.max(...dataRows.map(r => (r || []).length), 0);
+        const order = maxCols >= 10
+          ? ['year', 'title', 'authors', 'journal', 'publisher', 'volume', 'pages', 'doi', 'url', 'type']
+          : ['year', 'title', 'authors', 'journal', 'volume', 'pages', 'doi', 'url', 'type'];
         order.forEach((key, idx) => {
           if (indexByKey[key] < 0) indexByKey[key] = idx;
         });
