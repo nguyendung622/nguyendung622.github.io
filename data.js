@@ -38,12 +38,12 @@ const profileData = {
   teaching: [
     {
       name: "Thiết kế và Quản trị Website Báo chí",
-      url: "https://nguyendung622.github.io/tkweb/",
+      url: "https://nguyendung622.github.io/tkweb",
       description: "Xây dựng, thiết kế và quản trị website báo chí trực tuyến"
     },
     {
       name: "XML và Ứng dụng",
-      url: "https://nguyendung622.github.io/xml/",
+      url: "https://nguyendung622.github.io/xml",
       description: "Ngôn ngữ XML và các ứng dụng trong lưu trữ, trao đổi dữ liệu"
     },
     {
