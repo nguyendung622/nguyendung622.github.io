@@ -1429,11 +1429,14 @@
           li.innerHTML = `
         <div class="pub-index">${globalIdx--}</div>
         <div>
-          <div class="pub-title">${link}</div>
           <div class="pub-meta">
             ${typeLabel(pub.type)}
-            ${pub.authors ? pub.authors + '<br>' : ''}
-            ${pub.publisher ? pub.publisher : ''}
+            ${pub.authors ? `${pub.authors} (${pub.year || ''})` : ''}
+          </div>
+          <div class="pub-title">${link}</div>
+          <div class="pub-meta">
+            ${pub.journal ? `<em>${pub.journal}</em>` : ''}
+            ${pub.publisher ? (pub.journal ? '. ' : '') + pub.publisher : ''}
             ${pub.volume ? `, ${pub.volume}` : ''}
             ${pub.pages ? `, tr. ${pub.pages}` : ''}
             ${doiEl}
