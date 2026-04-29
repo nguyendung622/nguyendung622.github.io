@@ -871,6 +871,18 @@
       opacity: 1;
     }
 
+    .pub-classif {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.1rem 0.4rem;
+      border-radius: 2px;
+      background: #fef3c7;
+      color: #92400e;
+    }
+
     .pub-url {
       font-family: var(--mono);
       font-size: 0.7rem;
@@ -1436,9 +1448,11 @@
           <div class="pub-title">${link}</div>
           <div class="pub-meta">
             ${pub.journal ? `<em>${pub.journal}</em>` : ''}
-            ${pub.publisher ? (pub.journal ? '. ' : '') + pub.publisher : ''}
-            ${pub.volume ? `, ${pub.volume}` : ''}
+            ${pub.publisher && pub.publisher !== pub.journal ? (pub.journal ? '. ' : '') + pub.publisher : ''}
+            ${pub.volume && pub.volume !== pub.journal && pub.volume !== pub.publisher ? `, ${pub.volume}` : ''}
             ${pub.pages ? `, tr. ${pub.pages}` : ''}
+            ${pub.role ? ` · ${pub.role}` : ''}
+            ${pub.classification ? ` · <span class="pub-classif">${pub.classification}</span>` : ''}
             ${doiEl}
           </div>
         </div>`;
@@ -1491,7 +1505,9 @@
         pages: item.pages || '',
         doi: item.doi || '',
         url: item.url || '',
-        type: normalizeType(item.type)
+        type: normalizeType(item.type),
+        role: item.role || '',
+        classification: item.classification || ''
       };
 
       if (!rec.type) {
@@ -1509,14 +1525,16 @@
       const aliases = {
         year: ['year', 'nam', 'published_year', 'publication_year', 'nam_xuat_ban'],
         title: ['title', 'tieu_de', 'ten_bai_bao', 'paper_title', 'article_title', 'ten_bai', 'bai_bao'],
-        authors: ['authors', 'tac_gia', 'author', 'dong_tac_gia'],
-        journal: ['journal', 'venue', 'tap_chi', 'conference_name', 'noi_dang', 'source', 'publication'],
+        authors: ['authors', 'tac_gia', 'author', 'dong_tac_gia', 'danh_sach_tac_gia'],
+        journal: ['journal', 'venue', 'tap_chi_hoi_nghi', 'tap_chi', 'conference_name', 'noi_dang', 'source', 'publication'],
         publisher: ['publisher', 'nha_xuat_ban', 'nxb', 'published_by', 'publisher_name'],
-        volume: ['volume', 'tap', 'so', 'vol', 'issue'],
+        volume: ['volume'],
         pages: ['pages', 'trang', 'page', 'pp'],
-        doi: ['doi', 'doi_link'],
-        url: ['url', 'link', 'pdf', 'fulltext', 'full_text'],
-        type: ['type', 'loai', 'category']
+        doi: ['doi', 'doi_link', 'link_doi', 'link'],
+        url: ['url', 'pdf', 'fulltext', 'full_text'],
+        type: ['type', 'loai', 'category'],
+        role: ['role', 'vai_tro', 'vai_tro_tac_gia'],
+        classification: ['classification', 'phan_loai', 'phanloai', 'index', 'indexed']
       };
 
       const indexByKey = {};
@@ -1535,9 +1553,9 @@
       // Fallback when sheet has no header row: use common column order.
       if (!hasHeader) {
         const maxCols = Math.max(...dataRows.map(r => (r || []).length), 0);
-        const order = maxCols >= 10
-          ? ['year', 'title', 'authors', 'journal', 'publisher', 'volume', 'pages', 'doi', 'url', 'type']
-          : ['year', 'title', 'authors', 'journal', 'volume', 'pages', 'doi', 'url', 'type'];
+        const order = maxCols >= 11
+          ? ['stt', 'title', 'year', 'type', 'journal', 'publisher', 'volume', 'role', 'classification', 'authors', 'doi']
+          : ['year', 'title', 'authors', 'journal', 'publisher', 'volume', 'pages', 'doi', 'url', 'type'];
         order.forEach((key, idx) => {
           if (indexByKey[key] < 0) indexByKey[key] = idx;
         });
