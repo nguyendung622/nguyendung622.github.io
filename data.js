@@ -48,7 +48,7 @@ const profileData = {
     },
     {
       name: "Lập trình ứng dụng cho thiết bị di động",
-      url: null,
+      url: "https://nguyendung622.github.io/giao_trinh_flutter",
       description: "Phát triển ứng dụng trên nền tảng Android và iOS"
     }
   ],
