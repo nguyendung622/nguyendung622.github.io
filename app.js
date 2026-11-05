@@ -66,8 +66,7 @@ const I18N = {
     pubsN: n => `${n} công trình`,
     yearAria: (y, n) => `Năm ${y}: ${n} công trình`,
     countAll: (n, s) => s ? `${n} công trình, gồm ${s} bài đã nộp đang chờ phản biện.` : `${n} công trình.`,
-    countSome: (k, n) => `Hiển thị ${k} trong ${n} công trình.`,
-    showAll: n => `Xem tất cả ${n} công trình`
+    countSome: (k, n) => `Hiển thị ${k} trong ${n} công trình.`
   },
   en: {
     docTitle: 'Dr. Dung Nguyen – Faculty of Information Technology, University of Sciences, Hue University',
@@ -118,8 +117,7 @@ const I18N = {
     pubsN: n => `${n} ${n === 1 ? 'publication' : 'publications'}`,
     yearAria: (y, n) => `${y}: ${n} ${n === 1 ? 'publication' : 'publications'}`,
     countAll: (n, s) => s ? `${n} publications, including ${s} submitted and under review.` : `${n} publications.`,
-    countSome: (k, n) => `Showing ${k} of ${n} publications.`,
-    showAll: n => `Show all ${n} publications`
+    countSome: (k, n) => `Showing ${k} of ${n} publications.`
   }
 };
 
@@ -838,8 +836,7 @@ function citationText(p) {
 }
 
 /* ───────── Công trình: hiển thị ───────── */
-const PUBS_COLLAPSED = 10;
-const pubState = { all: [], type: 'all', year: null, query: '', expanded: false, status: 'loading' };
+const pubState = { all: [], type: 'all', year: null, query: '', status: 'loading' };
 
 function renderStats(pubs) {
   const counted = pubs.filter(p => p.state !== 'submitted');
@@ -937,7 +934,7 @@ function pubItemHtml(p, n) {
 const STATE_ORDER = { published: 0, accepted: 1, submitted: 2 };
 
 function renderPubList({ animate = true } = {}) {
-  const { all, type, year, query, expanded } = pubState;
+  const { all, type, year, query } = pubState;
   const q = foldText(query.trim());
   const shown = all.filter(p =>
     (type === 'all' || (type === 'indexed' ? isIndexed(p) : p.type === type)) &&
@@ -961,25 +958,17 @@ function renderPubList({ animate = true } = {}) {
     .sort((a, b) => b[0].year - a[0].year || STATE_ORDER[a[0].state] - STATE_ORDER[b[0].state] || b[1] - a[1])
     .map(([p]) => p);
 
-  // Chỉ thu gọn khi xem toàn bộ; đã lọc hoặc tìm kiếm thì hiện đủ kết quả.
-  const canCollapse = !expanded && type === 'all' && !year && !q && ordered.length > PUBS_COLLAPSED;
-  const visible = canCollapse ? ordered.slice(0, PUBS_COLLAPSED) : ordered;
-
-  const totalByYear = new Map();
-  ordered.forEach(p => totalByYear.set(p.year, (totalByYear.get(p.year) || 0) + 1));
   const byYear = new Map();
-  visible.forEach(p => {
+  ordered.forEach(p => {
     if (!byYear.has(p.year)) byYear.set(p.year, []);
     byYear.get(p.year).push(p);
   });
 
   let n = 0;
   box.innerHTML = [...byYear.keys()].map(y => `<section class="pub-year">
-      <div class="pub-year-label">${y || t('other')}<small>${t('pubsN')(totalByYear.get(y))}</small></div>
+      <div class="pub-year-label">${y || t('other')}<small>${t('pubsN')(byYear.get(y).length)}</small></div>
       <ul>${byYear.get(y).map(p => pubItemHtml(p, n++)).join('')}</ul>
-    </section>`).join('') + (canCollapse
-    ? `<button class="more-btn" type="button" id="pub-more">${t('showAll')(ordered.length)}</button>`
-    : '');
+    </section>`).join('');
 }
 
 function renderPublications({ animate = true } = {}) {
@@ -1016,12 +1005,6 @@ function bindPubControls() {
     renderPubList();
   });
 
-  $('#pub-list').addEventListener('click', e => {
-    if (!e.target.closest('#pub-more')) return;
-    pubState.expanded = true;
-    renderPubList();
-  });
-
   $('#featured').addEventListener('pointermove', e => {
     const card = e.target.closest('.feat');
     if (!card) return;
@@ -1039,7 +1022,7 @@ function bindPubControls() {
     debounce = setTimeout(() => { pubState.query = e.target.value; renderPubList(); }, 160);
   });
 
-  // Khi in hoặc xuất PDF cần đủ danh sách và số liệu cuối cùng, không phải số đang đếm dở.
+  // Khi in hoặc xuất PDF cần số liệu cuối cùng, không phải số đang đếm dở.
   addEventListener('beforeprint', () => {
     $$('[data-stat]').forEach(el => {
       if (!el.dataset.value) return;
@@ -1047,9 +1030,6 @@ function bindPubControls() {
       el.dataset.final = '1';
       el.textContent = el.dataset.value;
     });
-    if (pubState.expanded || !pubState.all.length) return;
-    pubState.expanded = true;
-    renderPubList({ animate: false });
   });
 }
 
