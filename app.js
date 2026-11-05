@@ -128,7 +128,7 @@ const I18N = {
 };
 
 const root = document.documentElement;
-let lang = root.lang === 'vi' ? 'vi' : 'en';
+let lang = root.lang === 'en' ? 'en' : 'vi';
 const t = key => I18N[lang][key];
 
 // Lấy bản tiếng Anh của một trường ("title" → "titleEn"); thiếu thì dùng bản tiếng Việt.
@@ -138,7 +138,7 @@ function applyStaticText() {
   root.lang = lang;
   document.title = t('docTitle');
   $('meta[name="description"]').content = t('docDesc');
-  $('link[rel="canonical"]').href = `https://nguyendung622.github.io/${lang === 'vi' ? '?lang=vi' : ''}`;
+  $('link[rel="canonical"]').href = `https://nguyendung622.github.io/${lang === 'en' ? '?lang=en' : ''}`;
 
   $$('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
   $$('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
@@ -1306,7 +1306,7 @@ function setLanguage(next) {
     lang = next;
     try { localStorage.setItem('lang', lang); } catch (e) { /* trình duyệt chặn lưu trữ */ }
     const url = new URL(location.href);
-    if (lang === 'vi') url.searchParams.set('lang', 'vi');
+    if (lang === 'en') url.searchParams.set('lang', 'en');
     else url.searchParams.delete('lang');
     history.replaceState(null, '', url);
 
