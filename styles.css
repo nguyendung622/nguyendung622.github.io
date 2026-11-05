@@ -278,7 +278,7 @@ html[lang='en'] .lang::before { transform: translateX(100%); }
   font-size: .8125rem; font-weight: 500; color: #fff; background: rgba(27, 18, 38, .78);
 }
 .motion-btn[hidden] { display: none; }
-.portrait { justify-self: end; width: min(100%, 410px); perspective: 850px; animation: rise 1.1s .15s var(--ease) both; }
+.portrait { justify-self: end; width: min(100%, 410px); perspective: 1400px; animation: rise 1.1s .15s var(--ease) both; }
 .portrait-tilt {
   position: relative; transform-style: preserve-3d;
   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
@@ -295,7 +295,7 @@ html[lang='en'] .lang::before { transform: translateX(100%); }
     linear-gradient(var(--grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size: 28px 28px;
-  transform: translateZ(-120px);
+  transform: translateZ(-60px);
 }
 .portrait-frame { position: relative; overflow: hidden; border-radius: 6px; background: var(--rule); box-shadow: 0 30px 60px -36px rgba(27, 18, 38, .55); }
 .portrait-frame img { width: 100%; transform: scale(1.06); }
@@ -338,8 +338,8 @@ html[lang='en'] .lang::before { transform: translateX(100%); }
 }
 .portrait-tilt.has-motion { animation: none; transition: transform .2s linear; }
 @keyframes sway {
-  from { transform: rotateY(-11deg) rotateX(3deg); }
-  to { transform: rotateY(11deg) rotateX(-3deg); }
+  from { transform: rotateY(-4deg) rotateX(1deg); }
+  to { transform: rotateY(4deg) rotateX(-1deg); }
 }
 
 /* Số liệu */

@@ -1401,8 +1401,8 @@ function initMotion() {
     const r = portrait.getBoundingClientRect();
     const dx = (e.clientX - r.left) / r.width - .5;
     const dy = (e.clientY - r.top) / r.height - .5;
-    tilt.style.setProperty('--ry', `${(dx * 18).toFixed(2)}deg`);
-    tilt.style.setProperty('--rx', `${(-dy * 13).toFixed(2)}deg`);
+    tilt.style.setProperty('--ry', `${(dx * 8).toFixed(2)}deg`);
+    tilt.style.setProperty('--rx', `${(-dy * 6).toFixed(2)}deg`);
   });
   portrait.addEventListener('pointerleave', () => {
     tilt.style.setProperty('--ry', '0deg');

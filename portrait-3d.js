@@ -91,7 +91,7 @@
 
     let w = 0, h = 0, raf = 0, visible = false;
     let targetX = 0, targetY = 0, curX = 0, curY = 0, lastPointer = -1e9, motionActive = false;
-    const STRENGTH = .05, IDLE_AFTER = 1800;
+    const STRENGTH = .028, IDLE_AFTER = 1800;
 
     function resize() {
       const r = canvas.getBoundingClientRect();
@@ -107,8 +107,8 @@
       raf = 0;
       if (!motionActive && now - lastPointer > IDLE_AFTER) {
         // Không có con trỏ và chưa có cảm biến: tự đổi góc nhìn rất chậm.
-        targetX = Math.sin(now * .00052) * .85;
-        targetY = Math.sin(now * .00037) * .45;
+        targetX = Math.sin(now * .00052) * .6;
+        targetY = Math.sin(now * .00037) * .3;
       }
       curX += (targetX - curX) * .07;
       curY += (targetY - curY) * .07;
@@ -141,7 +141,7 @@
 
     // Điện thoại: góc nhìn đi theo độ nghiêng của máy.
     const clamp = v => Math.max(-1, Math.min(1, v));
-    const RANGE = 11; // nghiêng chừng này độ là đạt mức lệch tối đa
+    const RANGE = 18; // nghiêng chừng này độ là đạt mức lệch tối đa
     let baseX = null, baseY = null;
 
     function onOrientation(e) {
@@ -161,8 +161,8 @@
         boxLayer.classList.add('has-motion');
         if (motionButton) motionButton.hidden = true;
       }
-      boxLayer.style.setProperty('--ry', `${(targetX * 13).toFixed(2)}deg`);
-      boxLayer.style.setProperty('--rx', `${(-targetY * 9).toFixed(2)}deg`);
+      boxLayer.style.setProperty('--ry', `${(targetX * 5).toFixed(2)}deg`);
+      boxLayer.style.setProperty('--rx', `${(-targetY * 3.5).toFixed(2)}deg`);
       request();
     }
 
