@@ -16,9 +16,12 @@
     uniform sampler2D depth;
     uniform vec2 offset;
     void main() {
-      // Lặp vài lần để tìm điểm ảnh thật sự rơi vào vị trí này, tránh mép bị nhân đôi.
-      vec2 p = uv;
-      for (int i = 0; i < 5; i++) p = uv - offset * texture2D(depth, p).r;
+      // Phóng nhẹ để còn phần ảnh dư ở mép khi lệch (khớp với scale của ảnh thường trong CSS).
+      vec2 base = .5 + (uv - .5) / 1.06;
+      // Lớp ở độ sâu .35 đứng yên: người nhô ra đi một chiều, nền đi chiều ngược lại.
+      // Lặp để tìm điểm ảnh thật sự rơi vào vị trí này, tránh mép bị nhân đôi.
+      vec2 p = base;
+      for (int i = 0; i < 8; i++) p = base - offset * (texture2D(depth, p).r - .35);
       gl_FragColor = texture2D(photo, p);
     }`;
 
@@ -46,7 +49,7 @@
       img.addEventListener('error', reject, { once: true });
     }));
 
-  async function create({ photo, depthSrc, pointerArea, boxLayer }) {
+  async function create({ photo, depthSrc, pointerArea, boxLayer, motionButton }) {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const canvas = document.createElement('canvas');
@@ -87,8 +90,8 @@
     canvas.addEventListener('webglcontextlost', () => canvas.remove());
 
     let w = 0, h = 0, raf = 0, visible = false;
-    let targetX = 0, targetY = 0, curX = 0, curY = 0, lastPointer = -1e9;
-    const STRENGTH = .03, IDLE_AFTER = 1800;
+    let targetX = 0, targetY = 0, curX = 0, curY = 0, lastPointer = -1e9, motionActive = false;
+    const STRENGTH = .05, IDLE_AFTER = 1800;
 
     function resize() {
       const r = canvas.getBoundingClientRect();
@@ -102,10 +105,10 @@
 
     function frame(now) {
       raf = 0;
-      if (now - lastPointer > IDLE_AFTER) {
-        // Không có con trỏ (kể cả màn hình cảm ứng): tự đổi góc nhìn rất chậm.
-        targetX = Math.sin(now * .00052) * .6;
-        targetY = Math.sin(now * .00037) * .3;
+      if (!motionActive && now - lastPointer > IDLE_AFTER) {
+        // Không có con trỏ và chưa có cảm biến: tự đổi góc nhìn rất chậm.
+        targetX = Math.sin(now * .00052) * .85;
+        targetY = Math.sin(now * .00037) * .45;
       }
       curX += (targetX - curX) * .07;
       curY += (targetY - curY) * .07;
@@ -135,6 +138,48 @@
       targetY = Math.max(-1, Math.min(1, ny * 1.5));
       lastPointer = performance.now();
     });
+
+    // Điện thoại: góc nhìn đi theo độ nghiêng của máy.
+    const clamp = v => Math.max(-1, Math.min(1, v));
+    const RANGE = 11; // nghiêng chừng này độ là đạt mức lệch tối đa
+    let baseX = null, baseY = null;
+
+    function onOrientation(e) {
+      if (e.beta === null || e.gamma === null) return;
+      // Khi xoay ngang màn hình, trục của cảm biến đổi chỗ cho nhau.
+      const angle = (screen.orientation && screen.orientation.angle) || 0;
+      const x = angle === 90 ? e.beta : angle === 270 ? -e.beta : e.gamma;
+      const y = angle === 90 ? -e.gamma : angle === 270 ? e.gamma : e.beta;
+      if (baseX === null) { baseX = x; baseY = y; }
+      // Mốc trôi chậm theo tư thế cầm máy, nên cầm ở góc nào cũng dùng được.
+      baseX += (x - baseX) * .008;
+      baseY += (y - baseY) * .008;
+      targetX = clamp((x - baseX) / RANGE);
+      targetY = clamp((y - baseY) / RANGE);
+      if (!motionActive) {
+        motionActive = true;
+        boxLayer.classList.add('has-motion');
+        if (motionButton) motionButton.hidden = true;
+      }
+      boxLayer.style.setProperty('--ry', `${(targetX * 13).toFixed(2)}deg`);
+      boxLayer.style.setProperty('--rx', `${(-targetY * 9).toFixed(2)}deg`);
+      request();
+    }
+
+    if ('DeviceOrientationEvent' in window && matchMedia('(hover: none)').matches) {
+      // Android gửi dữ liệu ngay. iPhone và iPad chỉ gửi sau khi người xem bấm và đồng ý,
+      // nên nút chỉ hiện khi đã chờ một lúc mà chưa nhận được dữ liệu.
+      addEventListener('deviceorientation', onOrientation);
+      if (motionButton && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        setTimeout(() => { if (!motionActive) motionButton.hidden = false; }, 1000);
+        motionButton.addEventListener('click', async () => {
+          motionButton.hidden = true;
+          try {
+            await DeviceOrientationEvent.requestPermission();
+          } catch (err) { /* không được phép: giữ hiệu ứng tự chuyển động */ }
+        });
+      }
+    }
 
     new ResizeObserver(resize).observe(canvas);
     new IntersectionObserver(([entry]) => {

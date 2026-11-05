@@ -9,7 +9,7 @@ const profileData = {
   name: "Nguyễn Dũng",
   nameEn: "Dung Nguyen",
   degree: "TS.",
-  degreeEn: "Dr.",
+  degreeSuffixEn: "Ph.D.",
   title: "Giảng viên",
   titleEn: "Lecturer",
   department: "Khoa Công nghệ Thông tin",
@@ -344,6 +344,67 @@ const profileData = {
         [812, 506, 832, 547], [844, 526, 870, 564],
         [188, 128, 404, 271, "xe buýt", "bus", "0.97"]
       ]
+    }
+  ],
+
+  // --- HOAT DONG HOC THUAT ---
+  // Chep anh vao assets/images/conference/ roi them muc vao day. De trong thi trang an phan nay.
+  // Vi du:
+  // {
+  //   src: "assets/images/conference/iwis2024-web.jpg", width: 1200, height: 800,
+  //   category: "Báo cáo hội nghị", categoryEn: "Conference talk",
+  //   caption: "Báo cáo tại IWIS 2024", captionEn: "Presenting at IWIS 2024",
+  //   author: "Tên người chụp"  // bo qua neu tu chup
+  // }
+  activities: [
+    {
+      src: "assets/images/conference/testceo2026-web.jpg", width: 1200, height: 800,
+      category: "Ra mắt sản phẩm", categoryEn: "Product launch",
+      caption: "Lễ ra mắt phần mềm TestCEO", captionEn: "Launch of the TestCEO software",
+      detail: "Phần mềm quản lý khảo thí và đánh giá tích hợp của DHTE và VTED. Hà Nội, 10/2026.",
+      detailEn: "Integrated examination management and assessment software by DHTE and VTED. Hanoi, October 2026."
+    },
+    {
+      src: "assets/images/conference/aibc2026-web.jpg", width: 1200, height: 800,
+      category: "Ra mắt sản phẩm", categoryEn: "Product launch",
+      caption: "Lễ ra mắt sản phẩm hợp tác DHTE và British Council", captionEn: "Launch of DHTE and British Council joint products",
+      detail: "Dự án phát triển sản phẩm tích hợp AI: AiBC và bộ đề thi thử IELTS Ready. Hà Nội, 9/2026.",
+      detailEn: "A project developing AI-integrated products: AiBC and the IELTS Ready mock test set. Hanoi, September 2026."
+    },
+    {
+      src: "assets/images/conference/fair2025-web.jpg", width: 1200, height: 800,
+      category: "Hội nghị quốc gia", categoryEn: "National conference",
+      caption: "Báo cáo tại FAIR 2025", captionEn: "Presenting at FAIR 2025",
+      detail: "Bài báo về phát hiện biển báo giao thông tại Việt Nam. Hội nghị khoa học quốc gia FAIR, Hà Nội, 8/2025.",
+      detailEn: "A paper on traffic sign detection in Vietnam, at the National Conference on Fundamental and Applied IT Research (FAIR). Hanoi, August 2025."
+    },
+    {
+      src: "assets/images/conference/iwis2024-web.jpg", width: 1200, height: 800,
+      category: "Hội nghị quốc tế", categoryEn: "International conference",
+      caption: "Tham dự IWIS 2024", captionEn: "Attending IWIS 2024",
+      detail: "International Workshop on Intelligent Systems, có bài báo về cải thiện phát hiện đối tượng bằng Transformer. Ulsan, Hàn Quốc, 8/2024.",
+      detailEn: "The International Workshop on Intelligent Systems, with a paper on improving Transformer-based object detection. Ulsan, Republic of Korea, August 2024."
+    },
+    {
+      src: "assets/images/conference/gtsd2024-web.jpg", width: 949, height: 633,
+      category: "Hội nghị quốc tế", categoryEn: "International conference",
+      caption: "Báo cáo tại GTSD 2024", captionEn: "Presenting at GTSD 2024",
+      detail: "Bài báo về cải thiện phát hiện đối tượng nhỏ dựa trên Swin Transformer. TP. Hồ Chí Minh, 7/2024.",
+      detailEn: "A paper on improving small object detection with Swin Transformer. Ho Chi Minh City, July 2024."
+    },
+    {
+      src: "assets/images/conference/fair2024-web.jpg", width: 833, height: 555,
+      category: "Hội nghị quốc gia", categoryEn: "National conference",
+      caption: "Báo cáo tại FAIR 2024", captionEn: "Presenting at FAIR 2024",
+      detail: "Bài báo về cải tiến mô hình DETR bằng Linformer, trình bày tại Hội nghị khoa học quốc gia FAIR lần thứ XVII.",
+      detailEn: "A paper on enhancing the DETR model with Linformer, presented at the 17th National Conference on Fundamental and Applied IT Research (FAIR)."
+    },
+    {
+      src: "assets/images/conference/ai-education-london-web.jpg", width: 1200, height: 800,
+      category: "AI trong giáo dục", categoryEn: "AI in education",
+      caption: "Kết nối AI cho giáo dục phổ thông tại Việt Nam", captionEn: "Connecting AI for general education in Vietnam",
+      detail: "Chuyến đi trong khuôn khổ chương trình, tại London, Anh.",
+      detailEn: "A trip as part of the programme, in London, United Kingdom."
     }
   ],
 

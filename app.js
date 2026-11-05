@@ -26,13 +26,16 @@ const I18N = {
     ctaPubs: 'Xem công trình',
     portraitAlt: 'Chân dung TS. Nguyễn Dũng, mặc áo sơ mi trắng có logo HUSC, khoanh tay và mỉm cười',
     bboxFace: 'giảng viên',
+    motionBtn: 'Bật 3D theo độ nghiêng máy',
+    showAllPubs: n => `Xem tất cả ${n} công trình`, showAllProjects: n => `Xem tất cả ${n} đề tài`, showLess: 'Thu gọn',
+    secActivities: 'Hoạt động chuyên môn',
     metricCitations: 'Trích dẫn', metricH: 'Chỉ số h',
     secBackground: 'Học vấn & công tác', eduTitle: 'Học vấn', careerTitle: 'Quá trình công tác', teachAreasTitle: 'Chuyên môn giảng dạy', fieldLabel: 'Ngành đào tạo', updating: 'Đang cập nhật', present: 'nay', highlightLead: 'Công bố nổi bật',
     appsTitle: 'Nghiên cứu qua hình ảnh', relatedShort: 'Công trình liên quan',
     appsNote: 'Khung nhận diện và điểm số được đặt thủ công để minh hoạ, không phải kết quả của mô hình. Ảnh từ Wikimedia Commons, đã thu nhỏ và cắt để hiển thị.',
     panoBox: 'cầu Trường Tiền', panoEyebrow: 'Huế, Việt Nam', panoTitle: 'Nơi tôi giảng dạy và nghiên cứu',
     secPlaces: 'Huế & nhà trường',
-    placesNote: 'Ảnh từ Wikimedia Commons, đã thu nhỏ và cắt để hiển thị. Khung nhận diện và điểm số chỉ để minh hoạ, không phải kết quả của mô hình.',
+    placesNote: 'Ảnh từ Wikimedia Commons, đã thu nhỏ và cắt để hiển thị. Khung nhận diện và điểm số chỉ để minh hoạ, không phải kết quả của mô hình. Ảnh cầu Trường Tiền cũng được làm mờ để làm nền đầu trang.',
     photoBy: 'Ảnh', publicDomain: 'phạm vi công cộng',
     secModels: 'Mô hình nghiên cứu', modelsAria: 'Chọn mô hình',
     modelsNote: 'Các mô hình tiêu biểu (SOTA), cập nhật 11/2026. Sơ đồ chỉ minh hoạ kiến trúc tổng quát; nhãn, khung và mặt nạ được đặt thủ công, chuỗi khung hình được cắt từ một ảnh tĩnh.',
@@ -69,21 +72,24 @@ const I18N = {
     countSome: (k, n) => `Hiển thị ${k} trong ${n} công trình.`
   },
   en: {
-    docTitle: 'Dr. Dung Nguyen – Faculty of Information Technology, University of Sciences, Hue University',
-    docDesc: 'Academic profile of Dr. Dung Nguyen, lecturer at the Faculty of Information Technology, University of Sciences, Hue University. Research in object detection, deep learning and computer vision.',
+    docTitle: 'Dung Nguyen, Ph.D. – Faculty of Information Technology, University of Sciences, Hue University',
+    docDesc: 'Academic profile of Dung Nguyen, Ph.D., lecturer at the Faculty of Information Technology, University of Sciences, Hue University. Research in object detection, deep learning and computer vision.',
     skip: 'Skip to main content',
     brandHome: 'Back to top', navAria: 'Main sections', langAria: 'Choose language', themeLabel: 'Switch light/dark theme',
     navBackground: 'Background', navResearch: 'Research', navModels: 'Models', navPubs: 'Publications', navProjects: 'Projects', navTeaching: 'Teaching', navContact: 'Contact',
     ctaPubs: 'View publications',
-    portraitAlt: 'Portrait of Dr. Dung Nguyen in a white shirt with the HUSC logo, arms crossed and smiling',
+    portraitAlt: 'Portrait of Dung Nguyen, Ph.D., in a white shirt with the HUSC logo, arms crossed and smiling',
     bboxFace: 'lecturer',
+    motionBtn: 'Tilt your phone for 3D',
+    showAllPubs: n => `Show all ${n} publications`, showAllProjects: n => `Show all ${n} projects`, showLess: 'Show less',
+    secActivities: 'Professional activities',
     metricCitations: 'Citations', metricH: 'h-index',
     secBackground: 'Education & career', eduTitle: 'Education', careerTitle: 'Career', teachAreasTitle: 'Teaching areas', fieldLabel: 'Field of study', updating: 'To be updated', present: 'present', highlightLead: 'Selected publications',
     appsTitle: 'Research in pictures', relatedShort: 'Related publications',
     appsNote: 'The detection boxes and scores were placed by hand as an illustration and are not model output. Photos from Wikimedia Commons, resized and cropped for display.',
     panoBox: 'Truong Tien Bridge', panoEyebrow: 'Hue, Vietnam', panoTitle: 'Where I teach and do research',
     secPlaces: 'Hue & the university',
-    placesNote: 'Photos from Wikimedia Commons, resized and cropped for display. The detection boxes and scores are illustrative, not model output.',
+    placesNote: 'Photos from Wikimedia Commons, resized and cropped for display. The detection boxes and scores are illustrative, not model output. The Truong Tien Bridge photo also appears, faded, as the header background.',
     photoBy: 'Photo', publicDomain: 'public domain',
     secModels: 'Research models', modelsAria: 'Choose a model',
     modelsNote: 'Representative state-of-the-art models, updated 11/2026. Diagrams show the general architecture only; labels, boxes and masks were placed by hand, and the frame sequence is cropped from one still photo.',
@@ -148,22 +154,30 @@ function applyStaticText() {
 /* ───────── Thông tin cơ bản ───────── */
 let booted = false;
 
+// Tiếng Việt đặt học vị trước tên, tiếng Anh đặt sau tên.
+const degreePrefix = () => (lang === 'vi' ? profileData.degree || '' : '');
+const degreeSuffix = () => (lang === 'en' ? profileData.degreeSuffixEn || '' : '');
+function fullName() {
+  const name = tr(profileData, 'name');
+  if (degreeSuffix()) return `${name}, ${degreeSuffix()}`;
+  return degreePrefix() ? `${degreePrefix()} ${name}` : name;
+}
+
 function renderProfile() {
   const p = profileData;
-  const name = tr(p, 'name'), degree = tr(p, 'degree');
-  const fullName = degree ? `${degree} ${name}` : name;
-  $('#brand-name').textContent = fullName;
+  const name = tr(p, 'name');
+  $('#brand-name').textContent = fullName();
   $('#hero-eyebrow').textContent = `${tr(p, 'title')} · ${tr(p, 'department')}`;
   $('#hero-affil').textContent = tr(p, 'university');
 
   // Tên: từng dòng lộ dần (chỉ lần tải trang đầu); dòng cuối in nghiêng. Không tách chữ cái để giữ kerning.
   const nameEl = $('#hero-name');
-  nameEl.setAttribute('aria-label', fullName);
+  nameEl.setAttribute('aria-label', fullName());
   nameEl.classList.toggle('intro', !booted);
   const words = name.normalize('NFC').split(' ');
   const lines = [words.slice(0, -1).join(' '), words[words.length - 1]].filter(Boolean);
   nameEl.innerHTML = lines.map((line, i) =>
-    `<span class="line" aria-hidden="true" style="--c:${i}">${i === 0 && degree ? `<span class="hero-degree">${esc(degree)}</span>` : ''}${esc(line)}</span>`
+    `<span class="line" aria-hidden="true" style="--c:${i}">${i === 0 && degreePrefix() ? `<span class="hero-degree">${esc(degreePrefix())}</span>` : ''}${esc(line)}${i === lines.length - 1 && degreeSuffix() ? `<span class="hero-degree hero-degree-after">, ${esc(degreeSuffix())}</span>` : ''}</span>`
   ).join('');
 
   $('#hero-bio').innerHTML = tr(p, 'bio').split('\n').filter(s => s.trim()).map(s => `<p>${esc(s.trim())}</p>`).join('');
@@ -375,6 +389,9 @@ function initModels() {
 }
 
 /* ───────── Đề tài ───────── */
+const PROJECTS_COLLAPSED = 6;
+const projectsView = { expanded: false };
+
 function renderProjects() {
   const yearsOf = period => (String(period).match(/\d{4}/g) || []).map(Number);
   const isLive = p => /đang/i.test(p.status || '');
@@ -383,7 +400,13 @@ function renderProjects() {
     (/chủ nhiệm/i.test(b.role) - /chủ nhiệm/i.test(a.role)) ||
     (Math.max(...yearsOf(b.period), 0) - Math.max(...yearsOf(a.period), 0)));
 
-  $('#timeline').innerHTML = list.map((p, i) => {
+  const canCollapse = list.length > PROJECTS_COLLAPSED;
+  const visible = canCollapse && !projectsView.expanded ? list.slice(0, PROJECTS_COLLAPSED) : list;
+  $('#projects-more').innerHTML = canCollapse
+    ? `<button class="more-btn" type="button" data-more="projects" aria-expanded="${projectsView.expanded}">${projectsView.expanded ? t('showLess') : t('showAllProjects')(list.length)}</button>`
+    : '';
+
+  $('#timeline').innerHTML = visible.map((p, i) => {
     const lead = /chủ nhiệm/i.test(p.role || '');
     return `<li class="tl r ${isLive(p) ? 'is-live' : ''} ${lead ? 'is-lead' : ''}" style="--i:${Math.min(i, 3)}">
       <div class="tl-when">
@@ -522,6 +545,26 @@ function renderApplicationPapers() {
   });
 }
 
+function renderActivities() {
+  const list = profileData.activities || [];
+  $('#activities').hidden = !list.length;
+  $('#activities-grid').innerHTML = list.map((a, i) => `
+    <figure class="place r" style="--i:${i % 2}">
+      <div class="place-photo">
+        <div class="place-stage">
+          <img src="${esc(a.src)}" width="${a.width}" height="${a.height}" alt="${esc(tr(a, 'caption'))}" loading="lazy" />
+        </div>
+      </div>
+      <figcaption>
+        <span>${esc(tr(a, 'caption'))}</span>
+        ${tr(a, 'detail') ? `<p class="app-desc">${esc(tr(a, 'detail'))}</p>` : ''}
+        <small>${esc(tr(a, 'category'))}${a.author ? ` · ${t('photoBy')}: ${esc(a.author)}` : ''}</small>
+      </figcaption>
+    </figure>`).join('');
+  // Đánh số lại các mục đang hiện.
+  $$('main .sec:not([hidden]) .sec-no').forEach((el, i) => { el.textContent = String(i + 1).padStart(2, '0'); });
+}
+
 function renderPlaces() {
   const places = profileData.places;
   if (!places) return;
@@ -573,6 +616,37 @@ function initPano() {
   }).observe(pano);
   addEventListener('scroll', schedule, { passive: true });
   addEventListener('resize', schedule);
+}
+
+/* ───────── Hiệu ứng Hero khi cuộn ───────── */
+function initHeroScroll() {
+  if (reducedMotion.matches) return;
+  const hero = $('#about'), bridge = $('.hero-bridge'), copy = $('.hero-copy'), photo = $('#portrait');
+  const wide = matchMedia('(min-width: 821px)');
+  let active = true, queued = false;
+
+  const update = () => {
+    queued = false;
+    // Cầu tính theo vị trí của chính nó trên màn hình, nên khi cuộn tới vẫn ở đúng chỗ.
+    const r = bridge.getBoundingClientRect();
+    const p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - innerHeight / 2) / (innerHeight / 2 + r.height / 2)));
+    bridge.style.setProperty('--bridge-y', `${((1 - p) * 30).toFixed(1)}px`);
+
+    // Chữ và ảnh chỉ tách lớp trên màn hình rộng; màn hình hẹp giữ nguyên để dễ đọc.
+    const y = wide.matches ? Math.max(0, scrollY) : 0;
+    copy.style.setProperty('--copy-y', `${Math.min(y * .06, 24).toFixed(1)}px`);
+    photo.style.setProperty('--photo-y', `${(y * .025).toFixed(1)}px`);
+  };
+  const schedule = () => {
+    if (active && !queued) { queued = true; requestAnimationFrame(update); }
+  };
+  new IntersectionObserver(([entry]) => {
+    active = entry.isIntersecting;
+    schedule();
+  }).observe(hero);
+  addEventListener('scroll', schedule, { passive: true });
+  addEventListener('resize', schedule);
+  update();
 }
 
 /* ───────── Quét định kỳ: mô hình "nhận diện lại" các ảnh đang hiện trên màn hình ───────── */
@@ -675,7 +749,7 @@ function renderContact() {
       <ul>${externalLinks().map(l => `<li>${externalLinkHtml(l)}</li>`).join('')}</ul>
     </div>`;
 
-  $('#foot-left').textContent = `© ${new Date().getFullYear()} ${[tr(p, 'degree'), tr(p, 'name')].filter(Boolean).join(' ')} · ${tr(p, 'university')}`;
+  $('#foot-left').textContent = `© ${new Date().getFullYear()} ${fullName()} · ${tr(p, 'university')}`;
 }
 
 /* ───────── Đọc dữ liệu công trình ───────── */
@@ -836,7 +910,8 @@ function citationText(p) {
 }
 
 /* ───────── Công trình: hiển thị ───────── */
-const pubState = { all: [], type: 'all', year: null, query: '', status: 'loading' };
+const PUBS_COLLAPSED = 10;
+const pubState = { all: [], type: 'all', year: null, query: '', expanded: false, status: 'loading' };
 
 function renderStats(pubs) {
   const counted = pubs.filter(p => p.state !== 'submitted');
@@ -934,7 +1009,7 @@ function pubItemHtml(p, n) {
 const STATE_ORDER = { published: 0, accepted: 1, submitted: 2 };
 
 function renderPubList({ animate = true } = {}) {
-  const { all, type, year, query } = pubState;
+  const { all, type, year, query, expanded } = pubState;
   const q = foldText(query.trim());
   const shown = all.filter(p =>
     (type === 'all' || (type === 'indexed' ? isIndexed(p) : p.type === type)) &&
@@ -958,17 +1033,26 @@ function renderPubList({ animate = true } = {}) {
     .sort((a, b) => b[0].year - a[0].year || STATE_ORDER[a[0].state] - STATE_ORDER[b[0].state] || b[1] - a[1])
     .map(([p]) => p);
 
+  // Chỉ thu gọn khi xem toàn bộ; đang lọc hoặc tìm kiếm thì hiện đủ kết quả.
+  const filtered = type !== 'all' || year || q;
+  const canCollapse = !filtered && ordered.length > PUBS_COLLAPSED;
+  const visible = canCollapse && !expanded ? ordered.slice(0, PUBS_COLLAPSED) : ordered;
+
+  const totalByYear = new Map();
+  ordered.forEach(p => totalByYear.set(p.year, (totalByYear.get(p.year) || 0) + 1));
   const byYear = new Map();
-  ordered.forEach(p => {
+  visible.forEach(p => {
     if (!byYear.has(p.year)) byYear.set(p.year, []);
     byYear.get(p.year).push(p);
   });
 
   let n = 0;
   box.innerHTML = [...byYear.keys()].map(y => `<section class="pub-year">
-      <div class="pub-year-label">${y || t('other')}<small>${t('pubsN')(byYear.get(y).length)}</small></div>
+      <div class="pub-year-label">${y || t('other')}<small>${t('pubsN')(totalByYear.get(y))}</small></div>
       <ul>${byYear.get(y).map(p => pubItemHtml(p, n++)).join('')}</ul>
-    </section>`).join('');
+    </section>`).join('') + (canCollapse
+    ? `<button class="more-btn" type="button" data-more="pubs" aria-expanded="${expanded}">${expanded ? t('showLess') : t('showAllPubs')(ordered.length)}</button>`
+    : '');
 }
 
 function renderPublications({ animate = true } = {}) {
@@ -987,6 +1071,26 @@ function renderPublications({ animate = true } = {}) {
   renderFeatured(pubState.all);
   renderHistogram(pubState.all);
   renderPubList({ animate });
+}
+
+// Thu gọn thì đưa người xem về đầu mục, để không bị lạc xuống phần bên dưới.
+function initMoreButtons() {
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-more]');
+    if (!btn) return;
+    const isPubs = btn.dataset.more === 'pubs';
+    const state = isPubs ? pubState : projectsView;
+    state.expanded = !state.expanded;
+    if (isPubs) renderPubList();
+    else {
+      renderProjects();
+      observeReveals($('#projects'));
+    }
+    if (!state.expanded) {
+      const top = $(isPubs ? '#pub-list' : '#projects');
+      top.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth' });
+    }
+  });
 }
 
 function bindPubControls() {
@@ -1022,7 +1126,7 @@ function bindPubControls() {
     debounce = setTimeout(() => { pubState.query = e.target.value; renderPubList(); }, 160);
   });
 
-  // Khi in hoặc xuất PDF cần số liệu cuối cùng, không phải số đang đếm dở.
+  // Khi in hoặc xuất PDF cần đủ danh sách và số liệu cuối cùng, không phải số đang đếm dở.
   addEventListener('beforeprint', () => {
     $$('[data-stat]').forEach(el => {
       if (!el.dataset.value) return;
@@ -1030,6 +1134,12 @@ function bindPubControls() {
       el.dataset.final = '1';
       el.textContent = el.dataset.value;
     });
+    projectsView.expanded = true;
+    renderProjects();
+    if (pubState.all.length) {
+      pubState.expanded = true;
+      renderPubList({ animate: false });
+    }
   });
 }
 
@@ -1183,6 +1293,7 @@ function renderAll({ animatePubs = true } = {}) {
   renderModels();
   renderProjects();
   renderTeaching();
+  renderActivities();
   renderPlaces();
   renderContact();
   renderPublications({ animate: animatePubs });
@@ -1277,7 +1388,8 @@ function initMotion() {
       photo: $('.portrait-frame img'),
       depthSrc: 'assets/images/dung-depth.jpg',
       pointerArea: $('#about'),
-      boxLayer: tilt
+      boxLayer: tilt,
+      motionButton: $('#motion-btn')
     });
   }
 
@@ -1289,8 +1401,8 @@ function initMotion() {
     const r = portrait.getBoundingClientRect();
     const dx = (e.clientX - r.left) / r.width - .5;
     const dy = (e.clientY - r.top) / r.height - .5;
-    tilt.style.setProperty('--ry', `${(dx * 12).toFixed(2)}deg`);
-    tilt.style.setProperty('--rx', `${(-dy * 9).toFixed(2)}deg`);
+    tilt.style.setProperty('--ry', `${(dx * 18).toFixed(2)}deg`);
+    tilt.style.setProperty('--rx', `${(-dy * 13).toFixed(2)}deg`);
   });
   portrait.addEventListener('pointerleave', () => {
     tilt.style.setProperty('--ry', '0deg');
@@ -1335,6 +1447,8 @@ observeReveals();
 initInterests();
 initModels();
 initPano();
+initMoreButtons();
+initHeroScroll();
 initPeriodicScan();
 initNav();
 initTheme();
