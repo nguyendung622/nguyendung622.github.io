@@ -1,39 +1,39 @@
 ﻿<!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TS. Nguyễn Dũng – Khoa Công nghệ Thông tin, Đại học Khoa học Huế</title>
+  <title>Dr. Dung Nguyen – Faculty of Information Technology, University of Sciences, Hue University</title>
   <meta name="description"
-    content="Trang học thuật của TS. Nguyễn Dũng, giảng viên Khoa Công nghệ Thông tin, Trường Đại học Khoa học, Đại học Huế. Nghiên cứu về phát hiện đối tượng, học sâu và thị giác máy tính." />
+    content="Academic profile of Dr. Dung Nguyen, lecturer at the Faculty of Information Technology, University of Sciences, Hue University. Research in object detection, deep learning and computer vision." />
   <meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#131018" media="(prefers-color-scheme: dark)" />
   <link rel="canonical" href="https://nguyendung622.github.io/" />
-  <link rel="alternate" hreflang="vi" href="https://nguyendung622.github.io/" />
-  <link rel="alternate" hreflang="en" href="https://nguyendung622.github.io/?lang=en" />
+  <link rel="alternate" hreflang="vi" href="https://nguyendung622.github.io/?lang=vi" />
+  <link rel="alternate" hreflang="en" href="https://nguyendung622.github.io/" />
   <link rel="alternate" hreflang="x-default" href="https://nguyendung622.github.io/" />
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
 
   <meta property="og:type" content="profile" />
-  <meta property="og:title" content="TS. Nguyễn Dũng – Giảng viên, Đại học Khoa học Huế" />
-  <meta property="og:description" content="Phát hiện đối tượng, học sâu và thị giác máy tính." />
+  <meta property="og:title" content="Dr. Dung Nguyen – Lecturer, University of Sciences, Hue University" />
+  <meta property="og:description" content="Object detection, deep learning and computer vision." />
   <meta property="og:url" content="https://nguyendung622.github.io/" />
   <meta property="og:image" content="https://nguyendung622.github.io/assets/images/dung.jpg" />
-  <meta property="og:locale" content="vi_VN" />
-  <meta property="og:locale:alternate" content="en_US" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:locale:alternate" content="vi_VN" />
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Person",
-    "name": "Nguyễn Dũng",
-    "honorificPrefix": "TS.",
-    "alternateName": "Dr. Dung Nguyen",
-    "jobTitle": "Giảng viên",
+    "name": "Dung Nguyen",
+    "honorificPrefix": "Dr.",
+    "alternateName": "Nguyễn Dũng",
+    "jobTitle": "Lecturer",
     "image": "https://nguyendung622.github.io/assets/images/dung.jpg",
     "url": "https://nguyendung622.github.io/",
-    "affiliation": { "@type": "CollegeOrUniversity", "name": "Trường Đại học Khoa học, Đại học Huế" },
+    "affiliation": { "@type": "CollegeOrUniversity", "name": "University of Sciences, Hue University" },
     "sameAs": [
       "https://orcid.org/0009-0000-4510-7504",
       "https://scholar.google.com/citations?user=bWXae6IAAAAJ",
@@ -52,8 +52,8 @@
       } catch (e) { }
       var param = new URLSearchParams(location.search).get('lang');
       if (param === 'en' || param === 'vi') lang = param;
-      d.lang = lang === 'en' ? 'en' : 'vi';
-      if (d.lang === 'en') {
+      d.lang = lang === 'vi' ? 'vi' : 'en';
+      if (d.lang === 'vi') {
         d.classList.add('i18n-pending');
         setTimeout(function () { d.classList.remove('i18n-pending'); }, 1500);
       }
@@ -76,30 +76,30 @@
 </head>
 
 <body>
-  <a class="skip" href="#background" data-i18n="skip">Bỏ qua, đến nội dung chính</a>
+  <a class="skip" href="#background" data-i18n="skip">Skip to main content</a>
   <div class="progress" aria-hidden="true"></div>
 
   <header class="nav" id="nav">
     <div class="nav-inner">
-      <a class="brand" href="#about" data-i18n-aria-label="brandHome" aria-label="Về đầu trang">
+      <a class="brand" href="#about" data-i18n-aria-label="brandHome" aria-label="Back to top">
         <span class="brand-mark" aria-hidden="true"></span>
-        <span id="brand-name">TS. Nguyễn Dũng</span>
+        <span id="brand-name">Dr. Dung Nguyen</span>
       </a>
-      <nav class="nav-links" id="nav-links" data-i18n-aria-label="navAria" aria-label="Các mục chính">
-        <a href="#background" data-i18n="navBackground">Học vấn</a>
-        <a href="#research" data-i18n="navResearch">Nghiên cứu</a>
-        <a href="#publications" data-i18n="navPubs">Công trình</a>
-        <a href="#models" data-i18n="navModels">Mô hình</a>
-        <a href="#projects" data-i18n="navProjects">Đề tài</a>
-        <a href="#teaching" data-i18n="navTeaching">Giảng dạy</a>
-        <a href="#contact" data-i18n="navContact">Liên hệ</a>
+      <nav class="nav-links" id="nav-links" data-i18n-aria-label="navAria" aria-label="Main sections">
+        <a href="#background" data-i18n="navBackground">Background</a>
+        <a href="#research" data-i18n="navResearch">Research</a>
+        <a href="#publications" data-i18n="navPubs">Publications</a>
+        <a href="#models" data-i18n="navModels">Models</a>
+        <a href="#projects" data-i18n="navProjects">Projects</a>
+        <a href="#teaching" data-i18n="navTeaching">Teaching</a>
+        <a href="#contact" data-i18n="navContact">Contact</a>
         <span class="nav-indicator" aria-hidden="true"></span>
       </nav>
-      <div class="lang" role="group" data-i18n-aria-label="langAria" aria-label="Chọn ngôn ngữ">
+      <div class="lang" role="group" data-i18n-aria-label="langAria" aria-label="Choose language">
         <a href="./?lang=vi" data-lang="vi" hreflang="vi" lang="vi" aria-label="Tiếng Việt">VI</a>
         <a href="./?lang=en" data-lang="en" hreflang="en" lang="en" aria-label="English">EN</a>
       </div>
-      <button class="theme-btn" id="theme-btn" type="button" data-i18n-aria-label="themeLabel" aria-label="Đổi giao diện sáng/tối">
+      <button class="theme-btn" id="theme-btn" type="button" data-i18n-aria-label="themeLabel" aria-label="Switch light/dark theme">
         <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true">
           <circle cx="12" cy="12" r="4" />
           <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
@@ -122,7 +122,7 @@
         <p class="hero-highlight" id="hero-highlight" hidden></p>
         <div class="hero-actions hero-enter" style="--d:.72s">
           <a class="btn btn-primary" href="#publications">
-            <span data-i18n="ctaPubs">Xem công trình</span>
+            <span data-i18n="ctaPubs">View publications</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
           </a>
           <div class="hero-links" id="hero-links"></div>
@@ -134,11 +134,11 @@
           <div class="portrait-frame">
             <img src="assets/images/dung.jpg" width="656" height="880" fetchpriority="high"
               data-i18n-alt="portraitAlt"
-              alt="Chân dung TS. Nguyễn Dũng, mặc áo sơ mi trắng có logo HUSC, khoanh tay và mỉm cười" />
+              alt="Portrait of Dr. Dung Nguyen in a white shirt with the HUSC logo, arms crossed and smiling" />
             <span class="scanline" aria-hidden="true"></span>
           </div>
           <div class="bbox bbox-face" aria-hidden="true">
-            <span class="bbox-label"><span data-i18n="bboxFace">giảng viên</span> <b data-conf="0.99">0.00</b></span>
+            <span class="bbox-label"><span data-i18n="bboxFace">lecturer</span> <b data-conf="0.99">0.00</b></span>
           </div>
           <div class="bbox bbox-logo" aria-hidden="true">
             <span class="bbox-label">HUSC <b data-conf="0.97">0.00</b></span>
@@ -149,10 +149,10 @@
 
     <div class="wrap">
       <dl class="stats" id="stats">
-        <div class="stat r"><dd data-stat="pubs">—</dd><dt data-i18n="statPubs">Công trình đã công bố &amp; được chấp nhận</dt></div>
-        <div class="stat r" style="--i:1"><dd data-stat="indexed">—</dd><dt data-i18n="statIndexed">Đã công bố trong ISI / Scopus / WoS</dt></div>
-        <div class="stat r" style="--i:2"><dd data-stat="lead">—</dd><dt data-i18n="statLead">Công trình là tác giả chính</dt></div>
-        <div class="stat r" style="--i:3"><dd data-stat="projects">—</dd><dt data-i18n="statProjects">Đề tài, dự án khoa học</dt></div>
+        <div class="stat r"><dd data-stat="pubs">—</dd><dt data-i18n="statPubs">Publications, published &amp; accepted</dt></div>
+        <div class="stat r" style="--i:1"><dd data-stat="indexed">—</dd><dt data-i18n="statIndexed">Published in ISI / Scopus / WoS</dt></div>
+        <div class="stat r" style="--i:2"><dd data-stat="lead">—</dd><dt data-i18n="statLead">Publications as lead author</dt></div>
+        <div class="stat r" style="--i:3"><dd data-stat="projects">—</dd><dt data-i18n="statProjects">Research projects</dt></div>
         <div class="stat r" data-metric style="--i:4" hidden><dd data-stat="citations">—</dd><dt id="metric-citations"></dt></div>
         <div class="stat r" data-metric style="--i:5" hidden><dd data-stat="hindex">—</dd><dt id="metric-hindex"></dt></div>
       </dl>
@@ -164,7 +164,7 @@
       <div class="wrap sec-grid">
         <header class="sec-head r">
           <span class="sec-no">01</span>
-          <h2 data-i18n="secBackground">Học vấn &amp; công tác</h2>
+          <h2 data-i18n="secBackground">Education &amp; career</h2>
         </header>
         <div class="sec-body">
           <div class="bg-cols" id="bg-cols"></div>
@@ -178,7 +178,7 @@
       <div class="wrap sec-grid">
         <header class="sec-head r">
           <span class="sec-no">02</span>
-          <h2 data-i18n="secResearch">Hướng nghiên cứu</h2>
+          <h2 data-i18n="secResearch">Research interests</h2>
         </header>
         <div class="sec-body">
           <div class="interests r" id="interests">
@@ -186,9 +186,9 @@
           </div>
 
           <div class="apps-block" id="apps-block">
-            <h3 class="sub-title r" data-i18n="appsTitle">Nghiên cứu qua hình ảnh</h3>
+            <h3 class="sub-title r" data-i18n="appsTitle">Research in pictures</h3>
             <div class="apps" id="apps"></div>
-            <p class="apps-note" data-i18n="appsNote">Khung nhận diện và điểm số được đặt thủ công để minh hoạ, không phải kết quả của mô hình. Ảnh từ Wikimedia Commons, đã thu nhỏ và cắt để hiển thị.</p>
+            <p class="apps-note" data-i18n="appsNote">The detection boxes and scores were placed by hand as an illustration and are not model output. Photos from Wikimedia Commons, resized and cropped for display.</p>
           </div>
         </div>
       </div>
@@ -200,23 +200,23 @@
       <div class="wrap sec-grid">
         <header class="sec-head r">
           <span class="sec-no">03</span>
-          <h2 data-i18n="secPubs">Công trình nghiên cứu</h2>
-          <p class="sec-note" data-i18n-html="corrNote">Dấu <b>*</b> chỉ tác giả liên hệ.</p>
+          <h2 data-i18n="secPubs">Publications</h2>
+          <p class="sec-note" data-i18n-html="corrNote"><b>*</b> marks the corresponding author.</p>
         </header>
         <div class="sec-body">
           <div class="featured-block" id="featured-block" hidden>
-            <h3 class="sub-title r" data-i18n="featured">Tiêu biểu</h3>
+            <h3 class="sub-title r" data-i18n="featured">Selected</h3>
             <div class="featured" id="featured"></div>
           </div>
 
           <div class="pub-panel r">
-            <h3 class="sub-title" data-i18n="byYear">Theo năm</h3>
-            <div class="hist" id="hist" role="group" data-i18n-aria-label="histAria" aria-label="Lọc công trình theo năm"></div>
+            <h3 class="sub-title" data-i18n="byYear">By year</h3>
+            <div class="hist" id="hist" role="group" data-i18n-aria-label="histAria" aria-label="Filter publications by year"></div>
             <div class="pub-controls">
-              <div class="chips" role="group" data-i18n-aria-label="filterAria" aria-label="Lọc theo loại công trình">
-                <button class="chip is-on" type="button" data-filter="all" data-i18n="all">Tất cả</button>
-                <button class="chip" type="button" data-filter="journal" data-i18n="journal">Tạp chí</button>
-                <button class="chip" type="button" data-filter="conference" data-i18n="conference">Hội nghị</button>
+              <div class="chips" role="group" data-i18n-aria-label="filterAria" aria-label="Filter by publication type">
+                <button class="chip is-on" type="button" data-filter="all" data-i18n="all">All</button>
+                <button class="chip" type="button" data-filter="journal" data-i18n="journal">Journal</button>
+                <button class="chip" type="button" data-filter="conference" data-i18n="conference">Conference</button>
                 <button class="chip" type="button" data-filter="indexed">ISI / Scopus</button>
               </div>
               <label class="search">
@@ -224,11 +224,11 @@
                   <circle cx="11" cy="11" r="7" />
                   <path d="m20 20-3.5-3.5" />
                 </svg>
-                <span class="sr" data-i18n="searchLabel">Tìm công trình</span>
-                <input id="pub-search" type="search" data-i18n-placeholder="searchPh" placeholder="Tìm theo tên, tác giả, tạp chí…" autocomplete="off" />
+                <span class="sr" data-i18n="searchLabel">Search publications</span>
+                <input id="pub-search" type="search" data-i18n-placeholder="searchPh" placeholder="Search by title, author, venue…" autocomplete="off" />
               </label>
             </div>
-            <p class="pub-count" id="pub-count" aria-live="polite">Đang tải danh sách công trình…</p>
+            <p class="pub-count" id="pub-count" aria-live="polite">Loading publications…</p>
           </div>
 
           <div id="pub-list" class="pub-list">
@@ -244,25 +244,25 @@
       <div class="wrap sec-grid">
         <header class="sec-head r">
           <span class="sec-no">04</span>
-          <h2 data-i18n="secModels">Mô hình nghiên cứu</h2>
-          <p class="sec-note" data-i18n="modelsNote">Các mô hình tiêu biểu (SOTA), cập nhật 11/2026. Sơ đồ chỉ minh hoạ kiến trúc tổng quát; nhãn, khung và mặt nạ được đặt thủ công, chuỗi khung hình được cắt từ một ảnh tĩnh.</p>
+          <h2 data-i18n="secModels">Research models</h2>
+          <p class="sec-note" data-i18n="modelsNote">Representative state-of-the-art models, updated 11/2026. Diagrams show the general architecture only; labels, boxes and masks were placed by hand, and the frame sequence is cropped from one still photo.</p>
         </header>
         <div class="sec-body">
-          <h3 class="sub-title r" data-i18n="tasksTitle">Bốn bài toán, cùng một cảnh</h3>
-          <div class="tasks" id="task-tabs" role="group" data-i18n-aria-label="tasksAria" aria-label="Chọn bài toán"></div>
+          <h3 class="sub-title r" data-i18n="tasksTitle">Four tasks, one scene</h3>
+          <div class="tasks" id="task-tabs" role="group" data-i18n-aria-label="tasksAria" aria-label="Choose a task"></div>
           <p class="task-credit" id="task-credit"></p>
           <div class="task-detail" id="task-detail"></div>
-          <h3 class="sub-title model-sub r" data-i18n="modelsSub">Mô hình SOTA</h3>
-          <div class="chips model-tabs r" id="model-tabs" role="group" data-i18n-aria-label="modelsAria" aria-label="Chọn mô hình"></div>
+          <h3 class="sub-title model-sub r" data-i18n="modelsSub">State-of-the-art models</h3>
+          <div class="chips model-tabs r" id="model-tabs" role="group" data-i18n-aria-label="modelsAria" aria-label="Choose a model"></div>
           <p class="model-summary" id="model-summary"></p>
           <p class="model-source" id="model-source"></p>
           <div class="model-stage r">
             <canvas id="model-canvas" role="img"></canvas>
-            <p class="cloud-hint" data-i18n="modelHint">Kéo để xoay, chạm vào số để xem từng bước</p>
+            <p class="cloud-hint" data-i18n="modelHint">Drag to rotate, tap a number to see that step</p>
           </div>
           <ol class="model-steps" id="model-steps"></ol>
           <div class="model-papers" id="model-papers" hidden>
-            <h3 class="sub-title" data-i18n="relatedPapers">Công trình của tôi trong bài toán này (tham chiếu)</h3>
+            <h3 class="sub-title" data-i18n="relatedPapers">My work on this task (for reference)</h3>
             <ul id="model-papers-list"></ul>
           </div>
         </div>
@@ -275,7 +275,7 @@
       <div class="wrap sec-grid">
         <header class="sec-head r">
           <span class="sec-no">05</span>
-          <h2 data-i18n="secProjects">Đề tài &amp; dự án</h2>
+          <h2 data-i18n="secProjects">Research projects</h2>
         </header>
         <div class="sec-body">
           <ol class="timeline" id="timeline"></ol>
@@ -287,7 +287,7 @@
       <div class="wrap sec-grid">
         <header class="sec-head r">
           <span class="sec-no">06</span>
-          <h2 data-i18n="secTeaching">Giảng dạy &amp; giáo trình</h2>
+          <h2 data-i18n="secTeaching">Teaching &amp; textbooks</h2>
         </header>
         <div class="sec-body">
           <div class="courses" id="courses"></div>
@@ -301,12 +301,12 @@
         <img id="pano-img" alt="" loading="lazy" />
         <span class="scanline place-scan" aria-hidden="true"></span>
         <div class="pano-box" aria-hidden="true">
-          <span class="bbox-label"><span data-i18n="panoBox">cầu Trường Tiền</span> <b>0.98</b></span>
+          <span class="bbox-label"><span data-i18n="panoBox">Truong Tien Bridge</span> <b>0.98</b></span>
         </div>
       </div>
       <div class="wrap pano-text">
-        <p class="eyebrow" data-i18n="panoEyebrow">Huế, Việt Nam</p>
-        <h2 id="pano-title" data-i18n="panoTitle">Nơi tôi giảng dạy và nghiên cứu</h2>
+        <p class="eyebrow" data-i18n="panoEyebrow">Hue, Vietnam</p>
+        <h2 id="pano-title" data-i18n="panoTitle">Where I teach and do research</h2>
       </div>
       <p class="pano-credit" id="pano-credit"></p>
     </section>
@@ -315,8 +315,8 @@
       <div class="wrap sec-grid">
         <header class="sec-head r">
           <span class="sec-no">07</span>
-          <h2 data-i18n="secPlaces">Huế &amp; nhà trường</h2>
-          <p class="sec-note" data-i18n="placesNote">Ảnh từ Wikimedia Commons, đã thu nhỏ và cắt để hiển thị. Khung nhận diện và điểm số chỉ để minh hoạ, không phải kết quả của mô hình.</p>
+          <h2 data-i18n="secPlaces">Hue &amp; the university</h2>
+          <p class="sec-note" data-i18n="placesNote">Photos from Wikimedia Commons, resized and cropped for display. The detection boxes and scores are illustrative, not model output.</p>
         </header>
         <div class="sec-body">
           <div class="places" id="places-grid"></div>
@@ -329,13 +329,13 @@
     <div class="bg-lines bg-lines-contact" aria-hidden="true"></div>
     <div class="bg-glow bg-glow-contact" aria-hidden="true"></div>
     <div class="wrap">
-      <p class="eyebrow r" data-i18n="navContact">Liên hệ</p>
-      <h2 class="contact-lead r" data-i18n="contactLead">Trao đổi về nghiên cứu, hợp tác hoặc giảng dạy</h2>
+      <p class="eyebrow r" data-i18n="navContact">Contact</p>
+      <h2 class="contact-lead r" data-i18n="contactLead">Get in touch about research, collaboration or teaching</h2>
       <div class="contact-mail r" id="contact-mail"></div>
       <div class="contact-grid r" id="contact-grid"></div>
       <div class="foot">
         <span id="foot-left"></span>
-        <a href="#about" data-i18n="toTop">Về đầu trang ↑</a>
+        <a href="#about" data-i18n="toTop">Back to top ↑</a>
       </div>
     </div>
   </footer>
@@ -343,7 +343,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <noscript>
-    <p style="padding:2rem;text-align:center">Vui lòng bật JavaScript để xem đầy đủ nội dung trang. Email: ndung@husc.edu.vn</p>
+    <p style="padding:2rem;text-align:center">Please enable JavaScript to see the full page. Email: ndung@husc.edu.vn</p>
   </noscript>
 
   <!-- Google tag (gtag.js) -->
